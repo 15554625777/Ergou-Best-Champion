@@ -1,0 +1,212 @@
+﻿#region
+
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using LeagueSharp;
+using LeagueSharp.Common;
+
+#endregion
+
+namespace Darius
+{
+    internal class Program
+    {
+        private const string ChampionName = "Darius";
+        private static Orbwalking.Orbwalker _orbwalker;
+        private static readonly List<Spell> SpellList = new List<Spell>();
+        private static Spell _q, _w, _e, _r;
+        private static Menu _config;
+
+        public static SpellSlot IgniteSlot;
+        public static Items.Item Hydra;
+        public static Items.Item Tiamat;
+
+
+        private static void Main(string[] args)
+        {
+            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+        }
+
+        private static void Game_OnGameLoad(EventArgs args)
+        {
+            if (ObjectManager.Player.ChampionName != ChampionName) return;
+
+            _q = new Spell(SpellSlot.Q, 425);
+            _w = new Spell(SpellSlot.W, 145);
+            _e = new Spell(SpellSlot.E, 540);
+            _r = new Spell(SpellSlot.R, 460);
+
+            SpellList.Add(_q);
+            SpellList.Add(_w);
+            SpellList.Add(_e);
+            SpellList.Add(_r);
+
+            IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
+            Tiamat = new Items.Item(3077, 375);
+            Hydra = new Items.Item(3074, 375);
+
+            _config = new Menu("诺克萨斯之手", "Darius", true);
+
+            _config.AddSubMenu(new Menu("走砍", "Orbwalking"));
+            _orbwalker = new Orbwalking.Orbwalker(_config.SubMenu("Orbwalking"));
+
+            _config.AddSubMenu(new Menu("连招", "Combo"));
+            _config.SubMenu("Combo").AddItem(new MenuItem("UseQCombo", "使用 Q").SetValue(true));
+            _config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "使用 W").SetValue(true));
+            _config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "使用 E").SetValue(true));
+            _config.SubMenu("Combo").AddItem(new MenuItem("UseRCombo", "使用 R").SetValue(true));
+            _config.SubMenu("Combo").AddItem(new MenuItem("UseICombo", "使用 物品").SetValue(true));
+            _config.SubMenu("Combo").AddItem(new MenuItem("Killsteal", "抢人头").SetValue(true));
+            _config.SubMenu("Combo")
+                .AddItem(new MenuItem("ComboActive", "连招!").SetValue(new KeyBind(32, KeyBindType.Press)));
+
+            _config.AddSubMenu(new Menu("骚扰", "Harass"));
+            _config.SubMenu("Harass").AddItem(new MenuItem("UseQHarass", "使用 Q").SetValue(true));
+            _config.SubMenu("Harass")
+                .AddItem(new MenuItem("HarassActive", "使用!").SetValue(new KeyBind(88, KeyBindType.Press)));
+            _config.SubMenu("Harass")
+                .AddItem(
+                    new MenuItem("HarassActiveT", "骚扰 (自动)!").SetValue(new KeyBind("Y".ToCharArray()[0],
+                        KeyBindType.Toggle)));
+
+            _config.AddSubMenu(new Menu("范围", "Drawings"));
+            _config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("QRange", "Q 范围").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+            _config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("ERange", "E 范围").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
+            _config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("RRange", "R 范围").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
+            _config.AddToMainMenu();
+
+            Drawing.OnDraw += Drawing_OnDraw;
+            Game.OnGameUpdate += Game_OnGameUpdate;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+        }
+
+        private static void Drawing_OnDraw(EventArgs args)
+        {
+            if (SpellList == null) return;
+
+            foreach (var spell in SpellList)
+            {
+                var menuItem = _config.Item(spell.Slot + "Range").GetValue<Circle>();
+
+                if (menuItem.Active)
+                    Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, menuItem.Color);
+            }
+        }
+
+        private static void Game_OnGameUpdate(EventArgs args)
+        {
+            if (_config.Item("ComboActive").GetValue<KeyBind>().Active)
+                ExecuteSkills();
+
+            if (_config.Item("Killsteal").GetValue<bool>())
+                ExecuteKillsteal();
+
+            if ((_config.Item("HarassActive").GetValue<KeyBind>().Active) ||
+                (_config.Item("HarassActiveT").GetValue<KeyBind>().Active))
+                ExecuteHarass();
+        }
+
+        private static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            if (_config.Item("ComboActive").GetValue<KeyBind>().Active && _config.Item("UseWCombo").GetValue<bool>() &&
+                unit.IsMe && (target is Obj_AI_Hero))
+                _w.Cast();
+
+            if (_config.Item("ComboActive").GetValue<KeyBind>().Active && _config.Item("UseICombo").GetValue<bool>() &&
+                unit.IsMe && (target is Obj_AI_Hero) && !_w.IsReady())
+            {
+                Items.UseItem(Items.HasItem(3077) ? 3077 : 3074);
+            }
+        }
+
+        private static void CastR(Obj_AI_Base target)
+        {
+            if (!target.IsValidTarget(_r.Range) || !_r.IsReady()) return;
+
+            if (!(ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q, 1) > target.Health))
+            {
+                foreach (var buff in target.Buffs)
+                {
+                    if (buff.Name == "dariushemo")
+                    {
+                        if (ObjectManager.Player.GetSpellDamage(target, SpellSlot.R, 1) *
+                            (1 + buff.Count / 5) - 1 > target.Health)
+                        {
+                            _r.CastOnUnit(target, true);
+                        }
+                    }
+                }
+            }
+            else if (ObjectManager.Player.GetSpellDamage(target, SpellSlot.R, 1) - 15 >
+                     target.Health)
+            {
+                _r.CastOnUnit(target, true);
+            }
+        }
+
+        private static void ExecuteHarass()
+        {
+            if (!_config.Item("UseQHarass").GetValue<bool>() || !_q.IsReady()) return;
+
+            var c =
+                (from hero in ObjectManager.Get<Obj_AI_Hero>()
+                    where hero.IsValidTarget()
+                    select ObjectManager.Player.Distance(hero, false)).Count(dist => dist > 270 && dist <= _q.Range);
+
+            if (c > 0)
+                _q.Cast();
+        }
+
+        private static void ExecuteKillsteal()
+        {
+            foreach (var champion in ObjectManager.Get<Obj_AI_Hero>())
+            {
+                CastR(champion);
+                if (_r.IsReady()) continue;
+
+                if (IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && ObjectManager.Player.Distance(champion, false) < 600)
+                {
+                    if (ObjectManager.Player.GetSummonerSpellDamage(champion, Damage.SummonerSpell.Ignite) > champion.Health)
+                    {
+                        ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, champion);
+                    }
+                }
+            }
+        }
+
+        private static void ExecuteSkills()
+        {
+            var target = TargetSelector.GetTarget(_e.Range, TargetSelector.DamageType.Physical);
+            if (target == null) return;
+
+            if (_e.IsReady() && _config.Item("UseECombo").GetValue<bool>() &&
+                ObjectManager.Player.Distance(target, false) <= _e.Range)
+                _e.Cast(target.ServerPosition);
+
+            if (_q.IsReady() && _config.Item("UseQCombo").GetValue<bool>() &&
+                ObjectManager.Player.Distance(target, false) <= _q.Range)
+                _q.Cast();
+
+            if (_r.IsReady() && _config.Item("UseRCombo").GetValue<bool>() &&
+                ObjectManager.Player.Distance(target, false) <= _r.Range)
+                CastR(target);
+
+            if (_r.IsReady()) return;
+            if (IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && ObjectManager.Player.Distance(target, false) < 600)
+            {
+                if (ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health)
+                {
+                    ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, target);
+                }
+            }
+        }
+    }
+}
