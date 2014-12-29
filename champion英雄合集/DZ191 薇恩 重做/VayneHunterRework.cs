@@ -80,7 +80,7 @@ namespace VayneHunterRework
             Menu.SubMenu("Misc").AddItem(new MenuItem("NoEEnT", "禁止敌方塔下E").SetValue(true));
             Menu.SubMenu("Misc").AddItem(new MenuItem("WallTumble", "突袭 E墙").SetValue(new KeyBind("Y".ToCharArray()[0], KeyBindType.Press)));
             Menu.SubMenu("Misc").AddItem(new MenuItem("ThreshLantern", "抓起 锤石 灯笼").SetValue(new KeyBind("S".ToCharArray()[0], KeyBindType.Press)));
-            Menu.AddSubMenu(new Menu("[VH] BushRevealer", "BushReveal"));
+            Menu.AddSubMenu(new Menu("[VH] 草丛侦测", "BushReveal"));
             //Menu.SubMenu("BushReveal").AddItem(new MenuItem("BushReveal", "Bush Revealer").SetValue(new KeyBind("Z".ToCharArray()[0], KeyBindType.Toggle)));
             Menu.SubMenu("BushReveal").AddItem(new MenuItem("BushRevealer", "连招 使用 物品").SetValue(true));
             Menu.AddSubMenu(new Menu("[VH] 物品", "Items"));
