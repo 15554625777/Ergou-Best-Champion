@@ -233,8 +233,8 @@ namespace KurisuBlitz
             _menu.AddSubMenu(blitzTS);
             
             var menuD = new Menu("Blitz: 范围", "drawings");
-            menuD.AddItem(new MenuItem("drawQ", "显示 Q")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
-            menuD.AddItem(new MenuItem("drawR", "显示 R")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
+            menuD.AddItem(new MenuItem("drawQ", "范围 Q")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
+            menuD.AddItem(new MenuItem("drawR", "范围 R")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
             _menu.AddSubMenu(menuD);
             
             var menuG = new Menu("Blitz: 神之手", "autograb");
@@ -262,8 +262,9 @@ namespace KurisuBlitz
             var menuK = new Menu("Blitz: 抢人头", "blitzks");
             menuK.AddItem(new MenuItem("killstealQ", "使用 Q")).SetValue(false);
             menuK.AddItem(new MenuItem("killstealE", "使用 E")).SetValue(false);
-            menuK.AddItem(new MenuItem("killstealR", "使用 R")).SetValue(false);
+            menuK.AddItem(new MenuItem("killstealR", "Use R")).SetValue(false);
             _menu.AddSubMenu(menuK);
+
             _menu.AddItem(new MenuItem("gapcloser", "自动W跟上敌人")).SetValue(true);
             _menu.AddItem(new MenuItem("interrupt", "中断法术")).SetValue(true);
             _menu.AddItem(new MenuItem("useE", "Q中自动E")).SetValue(true);
