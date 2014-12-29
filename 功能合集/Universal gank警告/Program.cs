@@ -65,13 +65,13 @@ namespace UniversalGankAlerter
         {
             _previewCircle = new PreviewCircle();
 
-            _menu = new Menu("Universal Gank警告", "universalgankalerter", true);
-            _sliderRadius = new MenuItem("range", "极限 范围").SetValue(new Slider(3000, 500, 5000));
+            _menu = new Menu("Gank警告", "universalgankalerter", true);
+            _sliderRadius = new MenuItem("range", "极限范围").SetValue(new Slider(3000, 500, 5000));
             _sliderRadius.ValueChanged += SliderRadiusValueChanged;
-            _sliderCooldown = new MenuItem("cooldown", "冷却 (秒)").SetValue(new Slider(10, 0, 60));
-            _sliderLineDuration = new MenuItem("lineduration", "持续 时间 (秒)").SetValue(new Slider(10, 0, 20));
-            _dangerPing = new MenuItem("dangerping", "危险 警告 (局部)").SetValue(true);
-            _junglerOnly = new MenuItem("jungleronly", "仅 草丛警告").SetValue(false);
+            _sliderCooldown = new MenuItem("cooldown", "冷却时间 (秒)").SetValue(new Slider(10, 0, 60));
+            _sliderLineDuration = new MenuItem("lineduration", "持续时间 (秒)").SetValue(new Slider(10, 0, 20));
+            _dangerPing = new MenuItem("dangerping", "危险 警告 (本地)").SetValue(true);
+            _junglerOnly = new MenuItem("jungleronly", "只警惕 打野者").SetValue(false);
 
 
             _menu.AddItem(_sliderRadius);
@@ -99,7 +99,7 @@ namespace UniversalGankAlerter
         private static void Print(string msg)
         {
             Game.PrintChat(
-                "<font color='#ff3232'>Universal</font><font color='#d4d4d4'>Gank璀﹀憡:鍔犺浇鎴愬姛!姹夊寲by浜岀嫍!QQ缇361630847</font> <font color='#FFFFFF'>" +
+                "<font color='#ff3232'>Universal</font><font color='#d4d4d4'>Gank璀﹀憡:鍔犺級鎴愬姛锛佹饥鍖朾y浜岀嫍  浜岀嫍QQ缇361630847</font> <font color='#FFFFFF'>" +
                 msg + "</font>");
         }
 
