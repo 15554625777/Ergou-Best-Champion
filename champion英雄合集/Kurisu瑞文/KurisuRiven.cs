@@ -72,55 +72,56 @@ namespace KurisuRiven
             config = new Menu("Kurisu瑞文", "kriven", true);
 
             // Target Selector
-            var menuTS = new Menu("瑞文: 目标选择", "tselect");
+            var menuTS = new Menu("Riven: 目标选择", "tselect");
             TargetSelector.AddToMenu(menuTS);
             config.AddSubMenu(menuTS);
 
             // Orbwalker
-            var menuOrb = new Menu("瑞文:走砍", "orbwalker");
+            var menuOrb = new Menu("Riven: 走砍", "orbwalker");
             orbwalker = new Orbwalking.Orbwalker(menuOrb);
             config.AddSubMenu(menuOrb);
 
-            var menuK = new Menu("瑞文:键位设置", "demkeys");
+            var menuK = new Menu("Riven: 键位设置", "demkeys");
             menuK.AddItem(new MenuItem("combokey", "连招 键位")).SetValue(new KeyBind(32, KeyBindType.Press));
-            menuK.AddItem(new MenuItem("harasskey", "骚扰 键位")).SetValue(new KeyBind(67, KeyBindType.Press));
+            menuK.AddItem(new MenuItem("harasskey", "H骚扰 键位")).SetValue(new KeyBind(67, KeyBindType.Press));
             menuK.AddItem(new MenuItem("clearkey", "清线 键位")).SetValue(new KeyBind(86, KeyBindType.Press));
             menuK.AddItem(new MenuItem("jumpkey", "跳墙 键位")).SetValue(new KeyBind(88, KeyBindType.Press));
             menuK.AddItem(new MenuItem("changemode", "更换 模式")).SetValue(new KeyBind(90, KeyBindType.Press));
             config.AddSubMenu(menuK);
 
             // Draw settings
-            var menuD = new Menu("瑞文: 范围设置 ", "dsettings");
+            var menuD = new Menu("Riven: 范围设置 ", "dsettings");
             menuD.AddItem(new MenuItem("dsep1", "==== 范围设置"));
-            menuD.AddItem(new MenuItem("drawrr", "显示 R 范围")).SetValue(true);
-            menuD.AddItem(new MenuItem("drawaa", "显示 AA 范围")).SetValue(true);
+            menuD.AddItem(new MenuItem("drawrr", "显示 R 范围")).SetValue(false);
+            menuD.AddItem(new MenuItem("drawqq", "显示 Q 范围")).SetValue(true);
             menuD.AddItem(new MenuItem("drawp", "显示 被动")).SetValue(true);
             menuD.AddItem(new MenuItem("drawengage", "显示 交战 范围")).SetValue(true);
             menuD.AddItem(new MenuItem("drawjumps", "显示 跳墙 位置")).SetValue(true);
             menuD.AddItem(new MenuItem("drawkill", "显示 击杀 提示")).SetValue(true);
-            menuD.AddItem(new MenuItem("drawtarg", "显示 攻击目标")).SetValue(true);
+            menuD.AddItem(new MenuItem("drawtarg", "显示 攻击 目标")).SetValue(true);
             config.AddSubMenu(menuD);
 
             // Combo Settings
-            var menuC = new Menu("瑞文:瑞文设置 ", "csettings");        
+            var menuC = new Menu("Riven: 连招设置 ", "csettings");
             menuC.AddItem(new MenuItem("csep1", "==== E 设置"));
             menuC.AddItem(new MenuItem("usevalor", "连招使用 E")).SetValue(true);
-            menuC.AddItem(new MenuItem("valorhealth", "使用E|血量")).SetValue(new Slider(40));
-            menuC.AddItem(new MenuItem("waitvalor", "等待E(使用R)")).SetValue(true);
+            menuC.AddItem(new MenuItem("valorhealth", "使用 E > 超出平A范围|血量低于")).SetValue(new Slider(40));
             menuC.AddItem(new MenuItem("csep2", "==== R 设置"));
             menuC.AddItem(new MenuItem("useblade", "连招使用 R")).SetValue(true);
             menuC.AddItem(new MenuItem("bladewhen", "R使用时机: "))
-                .SetValue(new StringList(new[] { "容易击杀", "一般击杀", "困难击杀"}, 2));
+                .SetValue(new StringList(new[] { "容易击杀", "一般击杀", "困难击杀" }, 2));
             menuC.AddItem(new MenuItem("checkover", "击杀 提示")).SetValue(true);
+
             menuC.AddItem(new MenuItem("csep3", "==== Q 设置"));
-            menuC.AddItem(new MenuItem("cancelassist", "连招使用 Q")).SetValue(true);
+            menuC.AddItem(new MenuItem("cancelassist", "连招使用 Q")).SetValue(true);           
             menuC.AddItem(new MenuItem("nostickyq", "左右 QA （封锁走位）")).SetValue(false);
             menuC.AddItem(new MenuItem("blockanim", "封包 Q (取消后摇)")).SetValue(false);
-            menuC.AddItem(new MenuItem("qqdelay", "使用 Q 延迟: ")).SetValue(new Slider(1200, 1, 4000));
+            menuC.AddItem(new MenuItem("qqdelay", "使用 Q 延迟: ")).SetValue(new Slider(1200, 1, 3000));
+            
             config.AddSubMenu(menuC);
 
             // Extra Settings
-            var menuO = new Menu("瑞文:额外设置 ", "osettings");
+            var menuO = new Menu("Riven: 额外设置 ", "osettings");
             menuO.AddItem(new MenuItem("osep2", "==== 额外设置"));
             menuO.AddItem(new MenuItem("useignote", "使用 点燃")).SetValue(true);
             menuO.AddItem(new MenuItem("useautow", "使用 自动 W")).SetValue(true);
@@ -139,7 +140,7 @@ namespace KurisuRiven
             config.AddSubMenu(menuO);
 
             // Farm/Clear Settings
-            var menuJ = new Menu("瑞文:清线|清野", "jsettings");
+            var menuJ = new Menu("Riven: 清线|清野", "jsettings");
             menuJ.AddItem(new MenuItem("jsep1", "==== 清野 设置"));
             menuJ.AddItem(new MenuItem("jungleE", "启用 E ")).SetValue(true);
             menuJ.AddItem(new MenuItem("jungleW", "启用 W ")).SetValue(true);
@@ -150,13 +151,12 @@ namespace KurisuRiven
             menuJ.AddItem(new MenuItem("farmQ", "启用 Q")).SetValue(true);
             config.AddSubMenu(menuJ);
 
-            var rivenD = new Menu("瑞文:调试设置", "therivend");
+            var rivenD = new Menu("瑞文: 调试设置", "therivend");
             rivenD.AddItem(new MenuItem("dsep2", "==== 调试 设置"));
             rivenD.AddItem(new MenuItem("debugdmg", "调试 组合 连招")).SetValue(false);
             rivenD.AddItem(new MenuItem("debugtrue", "调试 准确 范围")).SetValue(false);
             rivenD.AddItem(new MenuItem("exportjump", "调试 输出 位置")).SetValue(new KeyBind(73, KeyBindType.Press));
             config.AddSubMenu(rivenD);
-            config.AddToMainMenu();
 
             var donate = new Menu("瑞文: 捐赠信息", "feelo");
             donate.AddItem(new MenuItem("donate", "捐款,因为你爱我 <3欧元?"));
