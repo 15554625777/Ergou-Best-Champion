@@ -23,7 +23,7 @@ namespace Kayle
         public static Spell R;
         public static SpellSlot IgniteSlot;
         public static Items.Item Dfg;
-        private static Obj_AI_Hero _player;
+        private static readonly Obj_AI_Hero Player = ObjectManager.Player;
         public static Menu Config;
 
         private static bool RighteousFuryActive
@@ -38,16 +38,14 @@ namespace Kayle
 
         private static void Game_OnGameLoad(EventArgs args)
         {
-            _player = ObjectManager.Player;
-
-            if (_player.ChampionName != ChampionName) return;
+            if (Player.ChampionName != ChampionName) return;
 
             Q = new Spell(SpellSlot.Q, 650f);
             W = new Spell(SpellSlot.W, 900f);
             E = new Spell(SpellSlot.E, 625f);
             R = new Spell(SpellSlot.R, 900f);
 
-            IgniteSlot = _player.GetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("summonerdot");
 
             Dfg = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline
                 ? new Items.Item(3188, 750)
@@ -72,7 +70,7 @@ namespace Kayle
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQC", "使用 Q").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseWC", "使用 W").SetValue(false));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseEC", "使用 E").SetValue(true));
-            Config.SubMenu("Combo").AddItem(new MenuItem("UseIgniteC", "使用 点燃").SetValue(true));
+            Config.SubMenu("Combo").AddItem(new MenuItem("UseIgniteC", "使用 引燃").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("ComboActive", "连招!").SetValue(
                 new KeyBind(Config.Item("Orbwalk").GetValue<KeyBind>().Key, KeyBindType.Press)));
 
@@ -87,9 +85,9 @@ namespace Kayle
 
             Config.AddSubMenu(new Menu("清线", "Farm"));
             Config.SubMenu("Farm").AddItem(new MenuItem("UseQF", "使用 Q").SetValue(
-                new StringList(new[] {"控线", "清线", "同时", "禁用"}, 1)));
+                new StringList(new[] {"控线", "清线", "同时", "禁止"}, 1)));
             Config.SubMenu("Farm").AddItem(new MenuItem("UseEF", "使用 E").SetValue(
-                new StringList(new[] {"控线", "清线", "同时", "禁用"}, 2)));
+                new StringList(new[] {"控线", "清线", "同时", "禁止"}, 2)));
             Config.SubMenu("Farm").AddItem(new MenuItem("FreezeActive", "控线!").SetValue(
                 new KeyBind(Config.Item("Farm").GetValue<KeyBind>().Key, KeyBindType.Press)));
             Config.SubMenu("Farm").AddItem(new MenuItem("LaneClearActive", "清线!").SetValue(
@@ -102,33 +100,35 @@ namespace Kayle
                 new KeyBind(Config.Item("LaneClear").GetValue<KeyBind>().Key, KeyBindType.Press)));
 
             Config.AddSubMenu(new Menu("大招", "Ultimate"));
-            Config.SubMenu("Ultimate").AddSubMenu(new Menu("盟友", "Allies"));
-            foreach (Obj_AI_Hero ally in ObjectManager.Get<Obj_AI_Hero>()
+            Config.SubMenu("Ultimate").AddSubMenu(new Menu("队友", "Allies"));
+            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>()
                 .Where(ally => ally.IsAlly))
                 Config.SubMenu("Ultimate")
                     .SubMenu("Allies")
                     .AddItem(new MenuItem("Ult" + ally.ChampionName, ally.ChampionName)
-                        .SetValue(ally.ChampionName == _player.ChampionName));
+                        .SetValue(ally.ChampionName == Player.ChampionName));
             Config.SubMenu("Ultimate")
-                .AddItem(new MenuItem("UltMinHP", "最低HP百分比").SetValue(new Slider(20, 1)));
+                .AddItem(new MenuItem("UltMinHP", "R最低生命值").SetValue(new Slider(20, 1)));
 
-            Config.AddSubMenu(new Menu("治愈", "Heal"));
-            Config.SubMenu("Heal").AddSubMenu(new Menu("盟友", "Allies"));
-            foreach (Obj_AI_Hero ally in ObjectManager.Get<Obj_AI_Hero>()
+            Config.AddSubMenu(new Menu("回复", "Heal"));
+            Config.SubMenu("Heal").AddSubMenu(new Menu("队友", "Allies"));
+            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>()
                 .Where(ally => ally.IsAlly))
+            {
                 Config.SubMenu("Heal")
                     .SubMenu("Allies")
                     .AddItem(new MenuItem("Heal" + ally.ChampionName, ally.ChampionName)
-                        .SetValue(ally.ChampionName == _player.ChampionName));
+                        .SetValue(ally.ChampionName == Player.ChampionName));
+            }
             Config.SubMenu("Heal")
-                .AddItem(new MenuItem("HealMinHP", "最低HP百分比").SetValue(new Slider(40, 1)));
+                .AddItem(new MenuItem("HealMinHP", "回复最低生命值").SetValue(new Slider(40, 1)));
 
 
             Config.AddSubMenu(new Menu("杂项", "Misc"));
             Config.SubMenu("Misc").AddItem(new MenuItem("UsePackets", "使用 封包").SetValue(true));
             Config.SubMenu("Misc").AddItem(new MenuItem("SupportMode", "辅助 模式").SetValue(false));
 
-            MenuItem comboDmg = new MenuItem("ComboDamage", "显示组合连招伤害").SetValue(true);
+            var comboDmg = new MenuItem("ComboDamage", "显示连招后伤害").SetValue(true);
             Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
             Utility.HpBarDamageIndicator.Enabled = comboDmg.GetValue<bool>();
             comboDmg.ValueChanged +=
@@ -137,7 +137,7 @@ namespace Kayle
                     Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
-            Config.AddSubMenu(new Menu("范围", "Drawings"));
+            Config.AddSubMenu(new Menu("Drawings", "范围"));
             Config.SubMenu("Drawings").AddItem(new MenuItem("QRange", "Q 范围").SetValue(
                 new Circle(false, Color.FromArgb(100, 255, 0, 255))));
             Config.SubMenu("Drawings").AddItem(new MenuItem("WRange", "W 范围").SetValue(
@@ -150,7 +150,7 @@ namespace Kayle
 
             Config.AddToMainMenu();
 
-            Game.PrintChat("<font color=\"#00BFFF\">鍑皵# -</font> <font color=\"#FFFFFF\">鍔犺級鎴愬姛锛佹饥鍖朾y浜岀嫍锛丵Q缇361630847</font>");
+            Game.PrintChat("RoachxD 澶╀娇涓ㄥ姞杞芥垚鍔燂紒姹夊寲by Bbyyyy锛丵Q缇や辅361630847");
 
             Game.OnGameUpdate += Game_OnGameUpdate;
             Game.OnGameSendPacket += Game_OnGameSendPacket;
@@ -175,23 +175,23 @@ namespace Kayle
             }
 
             if (Config.Item("UseWC").GetValue<bool>() && W.IsReady() && wTarget != null &&
-                _player.Distance(wTarget) >= _player.GetRealAutoAttackRange())
+                !Orbwalking.InAutoAttackRange(wTarget))
             {
-                W.Cast(_player, Config.Item("UsePackets").GetValue<bool>());
+                W.Cast(Player, Config.Item("UsePackets").GetValue<bool>());
             }
 
             if (Config.Item("UseEC").GetValue<bool>() && E.IsReady() && eTarget != null &&
-                _player.Distance(eTarget) <= E.Range)
+                Player.Distance(eTarget) <= E.Range)
             {
                 E.Cast();
             }
 
             if (iTarget != null && Config.Item("UseIgniteC").GetValue<bool>() && IgniteSlot != SpellSlot.Unknown &&
-                _player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
+                Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
             {
-                if (_player.GetSummonerSpellDamage(iTarget, Damage.SummonerSpell.Ignite) > iTarget.Health)
+                if (Player.GetSummonerSpellDamage(iTarget, Damage.SummonerSpell.Ignite) > iTarget.Health)
                 {
-                    _player.Spellbook.CastSpell(IgniteSlot, iTarget);
+                    Player.Spellbook.CastSpell(IgniteSlot, iTarget);
                 }
             }
 
@@ -200,7 +200,9 @@ namespace Kayle
                     minion =>
                         minion.Distance(eTarget) <= 150 && eTarget != null && RighteousFuryActive &&
                         !Config.Item("SupportMode").GetValue<bool>()))
+            {
                 Orbwalker.ForceTarget(minion);
+            }
         }
 
         private static void Harass()
@@ -220,13 +222,13 @@ namespace Kayle
             }
 
             if (Config.Item("UseWH").GetValue<bool>() && W.IsReady() && wTarget != null &&
-                _player.Distance(wTarget) >= _player.GetRealAutoAttackRange())
+                !Orbwalking.InAutoAttackRange(wTarget))
             {
-                W.Cast(_player, Config.Item("UsePackets").GetValue<bool>());
+                W.Cast(Player, Config.Item("UsePackets").GetValue<bool>());
             }
 
             if (Config.Item("UseEH").GetValue<bool>() && E.IsReady() && eTarget != null &&
-                _player.Distance(eTarget) <= E.Range)
+                Player.Distance(eTarget) <= E.Range)
             {
                 E.Cast();
             }
@@ -243,8 +245,8 @@ namespace Kayle
 
         private static void Farm(bool laneClear)
         {
-            var allMinionsQ = MinionManager.GetMinions(_player.ServerPosition, Q.Range);
-            var allMinionsE = MinionManager.GetMinions(_player.ServerPosition, E.Range + 150);
+            var allMinionsQ = MinionManager.GetMinions(Player.ServerPosition, Q.Range);
+            var allMinionsE = MinionManager.GetMinions(Player.ServerPosition, E.Range + 150);
 
             var useQi = Config.Item("UseQF").GetValue<StringList>().SelectedIndex;
             var useEi = Config.Item("UseEF").GetValue<StringList>().SelectedIndex;
@@ -255,7 +257,7 @@ namespace Kayle
             {
                 foreach (var minion in allMinionsQ.Where(minion => !Orbwalking.InAutoAttackRange(minion) &&
                                                                    minion.Health <
-                                                                   _player.GetSpellDamage(minion, SpellSlot.Q)))
+                                                                   Player.GetSpellDamage(minion, SpellSlot.Q)))
                 {
                     Q.Cast(minion, Config.Item("UsePackets").GetValue<bool>());
                 }
@@ -267,14 +269,14 @@ namespace Kayle
 
             if (laneClear)
             {
-                foreach (var minion in allMinionsE.Where(minion => _player.Distance(minion) <= E.Range))
+                foreach (var minion in allMinionsE.Where(minion => Player.Distance(minion) <= E.Range))
                 {
                     E.Cast();
                 }
 
                 foreach (var minion in allMinionsE
                     .Where(
-                        eMinion => _player.Distance(eMinion) > E.Range && _player.Distance(eMinion) <= E.Range + 150)
+                        eMinion => Player.Distance(eMinion) > E.Range && Player.Distance(eMinion) <= E.Range + 150)
                     .SelectMany(eMinion => ObjectManager.Get<Obj_AI_Minion>()
                         .Where(minion => eMinion.Distance(minion) <= 150 && eMinion != minion)))
                 {
@@ -286,7 +288,7 @@ namespace Kayle
                 foreach (var minion in allMinionsE
                     .Where(
                         minion =>
-                            _player.Distance(minion) > _player.GetRealAutoAttackRange() &&
+                            !Orbwalking.InAutoAttackRange(minion) &&
                             !RighteousFuryActive))
                 {
                     E.Cast();
@@ -299,13 +301,14 @@ namespace Kayle
             var useQ = Config.Item("UseQJ").GetValue<bool>();
             var useE = Config.Item("UseEJ").GetValue<bool>();
 
-            var mobs = MinionManager.GetMinions(_player.ServerPosition, W.Range, MinionTypes.All,
+            var mobs = MinionManager.GetMinions(Player.ServerPosition, W.Range, MinionTypes.All,
                 MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (mobs.Count <= 0) return;
+            if (mobs.Count <= 0)
+            {
+                return;
+            }
 
             var mob = mobs[0];
-
             if (useQ && Q.IsReady())
             {
                 Q.Cast(mob, Config.Item("UsePackets").GetValue<bool>());
@@ -333,7 +336,7 @@ namespace Kayle
 
         private static void Heal()
         {
-            if (_player.HasBuff("Recall"))
+            if (Player.HasBuff("Recall"))
             {
                 return;
             }
@@ -355,20 +358,20 @@ namespace Kayle
             var damage = 0d;
             if (Q.IsReady())
             {
-                damage += _player.GetSpellDamage(enemy, SpellSlot.Q);
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q);
             }
 
             if (Dfg.IsReady())
             {
-                damage += _player.GetItemDamage(enemy, Damage.DamageItems.Dfg)/1.2;
+                damage += Player.GetItemDamage(enemy, Damage.DamageItems.Dfg)/1.2;
             }
 
             if (E.IsReady())
             {
-                damage += _player.GetSpellDamage(enemy, SpellSlot.E);
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
             }
 
-            if (IgniteSlot != SpellSlot.Unknown && _player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
+            if (IgniteSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
             {
                 damage += ObjectManager.Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite);
             }
@@ -378,7 +381,7 @@ namespace Kayle
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (_player.IsDead)
+            if (Player.IsDead)
             {
                 return;
             }
@@ -434,17 +437,17 @@ namespace Kayle
                 var menuItem = Config.Item(spell.Slot + "Range").GetValue<Circle>();
                 if (menuItem.Active)
                 {
-                    Utility.DrawCircle(_player.Position, spell.Range, menuItem.Color);
+                    Utility.DrawCircle(Player.Position, spell.Range, menuItem.Color);
                 }
             }
 
             var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-            var eDamage = 20 + ((E.Level - 1)*10) + (_player.BaseAbilityDamage*0.25);
+            var eDamage = 20 + ((E.Level - 1)*10) + (Player.BaseAbilityDamage*0.25);
             if (Config.Item("ComboDamage").GetValue<bool>())
             {
                 Drawing.DrawText(target.ServerPosition.X, target.ServerPosition.Y, Color.White,
                     ((target.Health - ComboDamage(target))/
-                     (RighteousFuryActive ? (eDamage) : (_player.GetAutoAttackDamage(target)))).ToString(
+                     (RighteousFuryActive ? (eDamage) : (Player.GetAutoAttackDamage(target)))).ToString(
                          CultureInfo.InvariantCulture));
             }
         }
