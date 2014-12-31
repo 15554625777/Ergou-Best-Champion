@@ -28,8 +28,6 @@ namespace Support
     #region
 
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -47,8 +45,6 @@ namespace Support
     /// </summary>
     public abstract class PluginBase
     {
-        private readonly List<Spell> _spells = new List<Spell>();
-
         #region BeforeEnemyAttack
 
         public delegate void BeforeEnemyAttackEvenH(BeforeEnemyAttackEventArgs args);
@@ -96,9 +92,21 @@ namespace Support
             Orbwalking.AfterAttack += OnAfterAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
-            Game.OnGameSendPacket += OnSendPacket;
-            Game.OnGameProcessPacket += OnProcessPacket;
+            //Game.OnGameSendPacket += OnSendPacket;
+            //Game.OnGameProcessPacket += OnProcessPacket;
             OnLoad(new EventArgs());
+        }
+
+        private void DrawSpell(Spell spell)
+        {
+            if(spell == null)
+                return;
+
+            var menu = ConfigValue<Circle>(spell.Slot + "Range");
+            if (menu.Active && spell.Level > 0)
+            {
+                Utility.DrawCircle(Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
+            }
         }
 
         /// <summary>
@@ -106,40 +114,6 @@ namespace Support
         /// </summary>
         private void InitPrivateEvents()
         {
-            Utility.DelayAction.Add(
-                500, () =>
-                {
-                    try
-                    {
-                        _spells.Add(Q);
-                        _spells.Add(W);
-                        _spells.Add(E);
-                        _spells.Add(R);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                });
-
-            Game.OnGameUpdate += args =>
-            {
-                try
-                {
-                    ActiveMode = Orbwalker.ActiveMode;
-
-                    if (Config.Item("visit").GetValue<bool>())
-                    {
-                        Process.Start("http://www.joduska.me/forum/topic/170-aio-support-is-easy/");
-                        Config.Item("visit").SetValue(false);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            };
-
             Orbwalking.BeforeAttack += args =>
             {
                 try
@@ -184,16 +158,10 @@ namespace Support
                         Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
                     }
 
-                    foreach (var spell in _spells.Where(s => s != null))
-                    {
-                        var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
-                        if (menuItem.Active && spell.Level > 0)
-                        {
-                            Utility.DrawCircle(
-                                Player.Position, spell.Range,
-                                spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
-                        }
-                    }
+                    DrawSpell(Q);
+                    DrawSpell(W);
+                    DrawSpell(E);
+                    DrawSpell(R);
                 }
                 catch (Exception e)
                 {
@@ -257,14 +225,13 @@ namespace Support
             MiscConfig = Config.AddSubMenu(new Menu("雜 項", "Misc"));
             InterruptConfig = Config.AddSubMenu(new Menu("打斷 法術", "Interrupt"));
             DrawingConfig = Config.AddSubMenu(new Menu("範 圍", "Drawings"));
-            Config.AddItem(new MenuItem("visit", "訪問 論壇").SetValue(false));
 
             // mana
             ManaConfig.AddSlider("HarassMana", "骚扰 法力少于 %", 1, 1, 100);
 
             // misc
             MiscConfig.AddBool("UsePackets", "使用 封包", true);
-            MiscConfig.AddList("AttackMinions", "攻击 小兵", new[] { "Smart", "Never", "Always" });
+            MiscConfig.AddList("AttackMinions", "攻击 小兵", new[] { "智 能", "从 不", "总 是" });
             MiscConfig.AddBool("AttackChampions", "攻击 英雄", true);
 
             // drawing
@@ -382,17 +349,12 @@ namespace Support
             get { return Orbwalking.GetRealAutoAttackRange(Target); }
         }
 
-        public float SpellRange
-        {
-            get { return _spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500; }
-        }
-
         /// <summary>
         ///     Target
         /// </summary>
         public Obj_AI_Hero Target
         {
-            get { return TargetSelector.GetTarget(SpellRange, TargetSelector.DamageType.Magical); }
+            get { return TargetSelector.GetTarget(2500, TargetSelector.DamageType.Magical); }
         }
 
         /// <summary>

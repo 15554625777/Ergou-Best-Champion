@@ -134,15 +134,15 @@ namespace Support
                 //OnSkillshotProtection += Protector_OnSkillshotProtection;
                 //OnTargetedProtection += Protector_OnTargetedProtection;
 
-                Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!婕㈠寲 By huabian QQ缇や辅 361630847"));
-                Console.WriteLine("姹夊寲 By 鑺辫竟  QQ缇や辅361630847");
+                Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!Protector by h3h3 loaded!婕㈠寲 By huabian QQ缇や辅 361630847"));
+                Console.WriteLine("Protector Init Complete");
                 _isInitComplete = true;
             }
         }
 
         private static void CreateMenu()
         {
-            Menu = new Menu("輔助合集", "Protector", true);
+            Menu = new Menu("h3h3 輔助合集", "Protector", true);
 
             // detector
             var detector = Menu.AddSubMenu(new Menu("探測器", "Detector"));
@@ -233,7 +233,7 @@ namespace Support
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(h => h.IsAlly && !h.IsDead)
                         .OrderByDescending(h => h.FlatPhysicalDamageMod)
-                        .Where(mikael.Item.IsInRange))
+                        .Where(h => ObjectManager.Player.Distance(h) < mikael.Item.Range))
                 {
                     foreach (var buff in CcTypes)
                     {

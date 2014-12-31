@@ -40,16 +40,16 @@ namespace Support.Util
     {
         private static readonly List<KeyValuePair<int, String>> Wards = new List<KeyValuePair<int, String>>
         {
-            new KeyValuePair<int, String>(3340, "黃色 飾品"),
-            new KeyValuePair<int, String>(3361, "升級版 隱形飾品"),
-            new KeyValuePair<int, String>(3205, "小 精魄"),
-            new KeyValuePair<int, String>(3207, "大 精魄"),
-            new KeyValuePair<int, String>(3154, "燈 籠"),
-            new KeyValuePair<int, String>(2049, "藍 眼石"),
-            new KeyValuePair<int, String>(2045, "紅 眼石"),
-            new KeyValuePair<int, String>(3160, "火 炬"),
-            new KeyValuePair<int, String>(2050, "探照燈"),
-            new KeyValuePair<int, String>(2044, "眼睛"),
+            new KeyValuePair<int, String>(3340, "Warding Totem Trinket"),
+            new KeyValuePair<int, String>(3361, "Greater Stealth Totem Trinket"),
+            new KeyValuePair<int, String>(3205, "Quill Coat"),
+            new KeyValuePair<int, String>(3207, "Spirit Of The Ancient Golem"),
+            new KeyValuePair<int, String>(3154, "Wriggle's Lantern"),
+            new KeyValuePair<int, String>(2049, "Sight Stone"),
+            new KeyValuePair<int, String>(2045, "Ruby Sightstone"),
+            new KeyValuePair<int, String>(3160, "Feral Flare"),
+            new KeyValuePair<int, String>(2050, "Explorer's Ward"),
+            new KeyValuePair<int, String>(2044, "Stealth Ward"),
         };
 
         private readonly List<EnemyInfo> _enemyInfo;
@@ -60,11 +60,11 @@ namespace Support.Util
         {
             _enemyInfo = ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy).Select(x => new EnemyInfo(x)).ToList();
 
-            _menu = menu.AddSubMenu(new Menu("自動對草叢使用探照燈", "AutoBushRevealerMenu"));
-            _menu.AddItem(new MenuItem("Auto Bush Revealer", "自動對草叢使用探照燈").SetValue(true));
-            _menu.AddItem(new MenuItem("AutoBushEnabled", "啟 用").SetValue(true));
+            _menu = menu.AddSubMenu(new Menu("Auto Bush Revealer", "AutoBushRevealerMenu"));
+            _menu.AddItem(new MenuItem("Auto Bush Revealer", "AutoBushRevealer").SetValue(true));
+            _menu.AddItem(new MenuItem("AutoBushEnabled", "Enabled").SetValue(true));
 
-            var useWardsMenu = _menu.AddSubMenu(new Menu("使用 眼睛: ", "AutoBushUseWards"));
+            var useWardsMenu = _menu.AddSubMenu(new Menu("Use Wards: ", "AutoBushUseWards"));
 
             foreach (var ward in Wards)
             {

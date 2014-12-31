@@ -56,23 +56,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>D:\TaifuL#\\System\clipper_library.dll</HintPath>
+      <HintPath>C:\360安全浏览器下载\LeagueSharp\\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp, Version=1.0.0.25, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\TaifuL#\\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\360安全浏览器下载\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>D:\TaifuL#\\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\360安全浏览器下载\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>D:\TaifuL#\\System\SharpDX.dll</HintPath>
+      <HintPath>C:\360安全浏览器下载\LeagueSharp\\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugins\Annie.cs" />
     <Compile Include="Util\AntiGapcloser.cs" />
     <Compile Include="Util\AutoBushRevealer.cs" />
     <Compile Include="Util\DamageBoostDatabase.cs" />

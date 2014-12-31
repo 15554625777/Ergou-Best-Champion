@@ -170,7 +170,7 @@ namespace Support.Util
 
         public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
         {
-            return item != null && item.IsReady() && target.IsValidTarget(item.Range);
+            return item.IsReady() && target.IsValidTarget(item.Range);
         }
 
         public static bool CastCheck(this Spell spell,
