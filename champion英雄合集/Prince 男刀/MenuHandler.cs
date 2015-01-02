@@ -12,12 +12,12 @@ namespace PrinceTalon
         {
         TalonConfig = new Menu(ObjectManager.Player.ChampionName, ObjectManager.Player.ChampionName, true);
 
-        Menu orbwalker = new Menu("走砍", "orbwalker");
+        Menu orbwalker = new Menu("官方集成 走砍", "orbwalker");
 
         Orb = new Orbwalking.Orbwalker(orbwalker);
         TalonConfig.AddSubMenu(orbwalker);
 
-        var targetselectormenu = new Menu("目標選擇", "Common_TargetSelector");
+        var targetselectormenu = new Menu("官方集成 目标选择", "Common_TargetSelector");
         TargetSelector.AddToMenu(targetselectormenu);
         TalonConfig.AddSubMenu(targetselectormenu);
 
@@ -51,11 +51,6 @@ namespace PrinceTalon
         TalonConfig.SubMenu("Items").AddItem(new MenuItem("useTiamat", "使用 提亞瑪特").SetValue(true));
         TalonConfig.SubMenu("Items").AddItem(new MenuItem("useHydra", "使用 九頭蛇").SetValue(true));
 
-        TalonConfig.AddSubMenu(new Menu("KillSteal", "KS"));
-        TalonConfig.SubMenu("KS").AddItem(new MenuItem("KSi", "使用 點燃").SetValue(true));
-        TalonConfig.SubMenu("KS").AddItem(new MenuItem("KSq", "使用 Q").SetValue(true));
-        TalonConfig.SubMenu("KS").AddItem(new MenuItem("KSw", "使用 W").SetValue(true));
-
         MenuItem dmgAfterComboItem = new MenuItem("DamageAfterCombo", "連招後顯示傷害").SetValue(true);
         Utility.HpBarDamageIndicator.DamageToUnit = MathHandler.ComboDamage;
         Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
@@ -66,7 +61,6 @@ namespace PrinceTalon
             };
 
         TalonConfig.AddSubMenu(new Menu("顯示範圍", "Drawing"));
-        TalonConfig.SubMenu("Drawing").AddItem(new MenuItem("HUD", "動態顯示").SetValue(true));
         TalonConfig.SubMenu("Drawing").AddItem(dmgAfterComboItem);
         TalonConfig.SubMenu("Drawing").AddItem(new MenuItem("drawW", "顯示 W").SetValue(new Circle(true, Color.FromArgb(100, Color.Aqua))));
         TalonConfig.SubMenu("Drawing").AddItem(new MenuItem("drawE", "顯示 E").SetValue(new Circle(true, Color.FromArgb(100, Color.Aqua))));
