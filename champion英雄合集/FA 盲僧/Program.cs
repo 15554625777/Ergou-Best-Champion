@@ -20,7 +20,7 @@ namespace FuckingAwesomeLeeSin
 {
     class Program
     {
-        #region params
+        #region Params
         public static string ChampName = "LeeSin";
         public static Orbwalking.Orbwalker Orbwalker;
         private static Obj_AI_Hero Player = ObjectManager.Player; // Instead of typing ObjectManager.Player you can just type Player
@@ -81,6 +81,8 @@ namespace FuckingAwesomeLeeSin
             R = new Spell(SpellSlot.R, 375);
             Q.SetSkillshot(Q.Instance.SData.SpellCastTime, Q.Instance.SData.LineWidth, Q.Instance.SData.MissileSpeed,true,SkillshotType.SkillshotLine);
             //Base menu
+            Menu = new Menu("FALeeSin", ChampName, true);
+            //Orbwalker and menu
             Menu = new Menu("FA盲僧", ChampName, true);
             //Orbwalker and menu
             Menu.AddSubMenu(new Menu("走砍", "Orbwalker"));
@@ -200,14 +202,24 @@ namespace FuckingAwesomeLeeSin
             var q = paramBool("q1H");
             var q2 = paramBool("q2H");
             var e = paramBool("eH");
+            var w = paramBool("wH");
 
-            if (q && Q.IsReady() && Q.Instance.Name == "BlindMonkQOne" && target.IsValidTarget(Q.Range)) CastQ1(target);
+            if (q && Q.IsReady() && Q.Instance.Name == "BlindMonkQOne" && target.IsValidTarget(Q.Range) && q) CastQ1(target);
             if (q2 && Q.IsReady() &&
-                (target.HasBuff("BlindMonkQOne", true) || target.HasBuff("blindmonkqonechaos", true)))
+               (target.HasBuff("BlindMonkQOne", true) || target.HasBuff("blindmonkqonechaos", true)) && q2)
             {
-                if(CastQAgain || !target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player))) Q.Cast();
+                if (CastQAgain || !target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player))) Q.Cast();
             }
-            if (e && E.IsReady() && target.IsValidTarget(E.Range) && E.Instance.Name == "BlindMonkEOne") E.Cast();
+            if (e && E.IsReady() && target.IsValidTarget(E.Range) && E.Instance.Name == "BlindMonkEOne" && e) E.Cast();
+            if (w && Player.Distance(target) < 50 && !(target.HasBuff("BlindMonkQOne", true) && !target.HasBuff("blindmonkqonechaos", true)) && (E.Instance.Name == "blindmonketwo" || !E.IsReady() && e) && (Q.Instance.Name == "blindmonkqtwo" || !Q.IsReady() && q))
+            {
+                var min =
+                    ObjectManager.Get<Obj_AI_Minion>()
+                        .Where(a => a.IsAlly && a.Distance(Player) <= W.Range)
+                        .OrderByDescending(a => a.Distance(target))
+                        .FirstOrDefault();
+                W.CastOnUnit(min);
+            }
 
         }
         #endregion
@@ -267,18 +279,18 @@ namespace FuckingAwesomeLeeSin
             {
                 Vector3 insecPosition = InterceptionPoint(GetAllyInsec(GetAllyHeroes(target, 2000 + Menu.Item("bonusRangeA").GetValue<Slider>().Value)));
                 insecLinePos = Drawing.WorldToScreen(insecPosition);
-                return V2E(insecPosition, target.Position, target.Distance(insecPosition) + 200).To3D();
+                return V2E(insecPosition, target.Position, target.Distance(insecPosition) + 230).To3D();
 
             } 
             if(turrets.Any() && paramBool("insec2tower"))
             {
                 insecLinePos = Drawing.WorldToScreen(turrets[0].Position);
-                return V2E(turrets[0].Position, target.Position, target.Distance(turrets[0].Position) + 200).To3D();
+                return V2E(turrets[0].Position, target.Position, target.Distance(turrets[0].Position) + 230).To3D();
             }
             if (paramBool("insec2orig"))
             {
                 insecLinePos = Drawing.WorldToScreen(insecPos);
-                return V2E(insecPos, target.Position, target.Distance(insecPos) + 200).To3D();
+                return V2E(insecPos, target.Position, target.Distance(insecPos) + 230).To3D();
             }
             return new Vector3();
         }
@@ -503,13 +515,17 @@ namespace FuckingAwesomeLeeSin
                    ? TargetSelector.GetSelectedTarget()
                    : TargetSelector.GetTarget(Q.Range + 200, TargetSelector.DamageType.Physical);
             if (Menu.Item("instaFlashInsec").GetValue<KeyBind>().Active) Drawing.DrawText(960, 340, System.Drawing.Color.Red, "FLASH INSEC ENABLED");
-            if (newTarget != null && newTarget.IsVisible && Player.Distance(newTarget) < 3000)
+            if (newTarget != null && newTarget.IsVisible && Player.Distance(newTarget) < 3000 && paramBool("insecDraw"))
             {
                 Vector2 targetPos = Drawing.WorldToScreen(newTarget.Position);
                 Drawing.DrawLine(insecLinePos.X, insecLinePos.Y, targetPos.X, targetPos.Y, 3, System.Drawing.Color.White);
                 Utility.DrawCircle(getInsecPos(newTarget), 100, System.Drawing.Color.White);
             }
             if (!paramBool("DrawEnabled")) return;
+            foreach (var t in ObjectManager.Get<Obj_AI_Hero>())
+            {
+                if(t.HasBuff("BlindMonkQOne", true) || t.HasBuff("blindmonkqonechaos", true)) Drawing.DrawCircle(t.Position, 200, System.Drawing.Color.Red);
+            }
             if (Menu.Item("smiteEnabled").GetValue<KeyBind>().Active && paramBool("drawSmite"))
             {
                 Utility.DrawCircle(Player.Position, 700, System.Drawing.Color.White);
@@ -787,17 +803,18 @@ namespace FuckingAwesomeLeeSin
         }
         public static void StarCombo()
         {
-            var target = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Physical);
             if (target == null) return;
-            if (R.GetDamage(target) >= target.Health && paramBool("ksR")) R.Cast(target, packets());
-            useItems(target);
             if ((target.HasBuff("BlindMonkQOne", true) || target.HasBuff("blindmonkqonechaos", true)) && paramBool("useQ2"))
             {
-                if (CastQAgain || target.HasBuffOfType(BuffType.Knockup) && !Player.IsValidTarget(300) && !R.IsReady() || !target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && !R.IsReady() || Q.GetDamage(target, 1) > target.Health)
+                if (CastQAgain || target.HasBuffOfType(BuffType.Knockup) && !Player.IsValidTarget(300) && !R.IsReady() || !target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) || Q.GetDamage(target, 1) > target.Health || returnQBuff().Distance(target) < Player.Distance(target) && !target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
                 {
                     Q.Cast();
                 }
             }
+            if ((paramBool("aaStacks") && Player.HasBuff("blindmonkpassive_cosmetic", true)) || target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player))) return;
+            if (R.GetDamage(target) >= target.Health && paramBool("ksR")) R.Cast(target, packets());
+            useItems(target);
             if (paramBool("useW"))
             {
                 if (paramBool("wMode") && target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(Player))
@@ -844,19 +861,19 @@ namespace FuckingAwesomeLeeSin
 
         public static string smitetype()
         {
-            if (SmiteBlue.Any(Items.HasItem))
+            if (SmiteBlue.Any(a => Items.HasItem(a)))
             {
                 return "s5_summonersmiteplayerganker";
             }
-            if (SmiteRed.Any(Items.HasItem))
+            if (SmiteRed.Any(a => Items.HasItem(a)))
             {
                 return "s5_summonersmiteduel";
             }
-            if (SmiteGrey.Any(Items.HasItem))
+            if (SmiteGrey.Any(a => Items.HasItem(a)))
             {
                 return "s5_summonersmitequick";
             }
-            if (SmitePurple.Any(Items.HasItem))
+            if (SmitePurple.Any(a => Items.HasItem(a)))
             {
                 return "itemsmiteaoe";
             }
@@ -873,7 +890,7 @@ namespace FuckingAwesomeLeeSin
 
         public static void PrintMessage(string msg) // Credits to ChewyMoon, and his Brain.exe
         {
-            Game.PrintChat("<font color=\"#6699ff\"><b>FA鐩插儳 鍔犺級鎴愬姛锛佹饥鍖朾y浜岀嫍锛丵Q缇361630847</b></font> <font color=\"#FFFFFF\">" + msg + "</font>");
+            Game.PrintChat("<font color=\"#6699ff\"><b>FALeeSin:</b></font> <font color=\"#FFFFFF\">" + msg + "</font>");
         }
         public static void Orbwalk(Vector3 pos, Obj_AI_Hero target = null)
         {
