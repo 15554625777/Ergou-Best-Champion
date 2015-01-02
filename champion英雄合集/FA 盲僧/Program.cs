@@ -890,7 +890,7 @@ namespace FuckingAwesomeLeeSin
 
         public static void PrintMessage(string msg) // Credits to ChewyMoon, and his Brain.exe
         {
-            Game.PrintChat("<font color=\"#6699ff\"><b>FALeeSin:</b></font> <font color=\"#FFFFFF\">" + msg + "</font>");
+            Game.PrintChat("<font color=\"#6699ff\"><b>FA鐩插儳 鍔犺級鎴愬姛锛佹饥鍖朾y浜岀嫍锛丵Q缇361630847</b></font> <font color=\"#FFFFFF\">" + msg + "</font>");
         }
         public static void Orbwalk(Vector3 pos, Obj_AI_Hero target = null)
         {
