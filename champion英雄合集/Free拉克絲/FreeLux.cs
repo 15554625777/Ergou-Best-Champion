@@ -1,5 +1,6 @@
 ﻿#region Includes
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using LeagueSharp;
@@ -48,15 +49,15 @@ namespace FreeLux
             #region Menu
             Menu = new Menu("Free" + ChampionName, ChampionName, true);
 
-            Menu orbwalkerMenu = new Menu("走砍", "Orbwalker");
+            Menu orbwalkerMenu = new Menu("集成 走砍", "Orbwalker");
             Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
             Menu.AddSubMenu(orbwalkerMenu);
 
-            Menu targetSelectorMenu = new Menu("目標選擇", "Target Selector");
+            Menu targetSelectorMenu = new Menu("集成 目标选择", "Target Selector");
             TargetSelector.AddToMenu(targetSelectorMenu);
             Menu.AddSubMenu(targetSelectorMenu);
 
-            Menu comboMenu = new Menu("連招", "Combo");
+            Menu comboMenu = new Menu("连招", "Combo");
             comboMenu.AddItem(new MenuItem("comboQ", "使用 Q").SetValue(true));
             comboMenu.AddItem(new MenuItem("comboE", "使用 E").SetValue(true));
             comboMenu.AddItem(new MenuItem("comboR", "使用 R").SetValue(true));
@@ -79,7 +80,7 @@ namespace FreeLux
             mixedMenu.AddItem(new MenuItem("mixedMinMana", "騷擾最低消耗 %").SetValue(new Slider(50)));
             Menu.AddSubMenu(mixedMenu);
 
-            Menu autoShieldMenu = new Menu("自動護盾", "Auto Shield");
+             Menu autoShieldMenu = new Menu("自動護盾", "Auto Shield");
             autoShieldMenu.AddItem(new MenuItem("selfAutoShield", "自動護盾自己").SetValue(true));
             autoShieldMenu.AddItem(new MenuItem("selfAutoShieldPercentage", "自己自動護盾最低血量 %")).SetValue(new Slider(30));
             autoShieldMenu.AddItem(new MenuItem("selfAutoShieldMinMana", "自己自動護盾最低藍量 %")).SetValue(new Slider(20));
@@ -114,6 +115,7 @@ namespace FreeLux
 
             Game.OnGameUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            Drawing.OnEndScene += Drawing_OnEndScene;
 
             GameObject.OnCreate += Actions.GameObject_OnCreate;
             GameObject.OnDelete += Actions.GameObject_OnDelete;
@@ -122,7 +124,6 @@ namespace FreeLux
 
             Game.PrintChat("FreeLux loaded. [By:  Feeeez]!");
         }
-
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
@@ -153,7 +154,7 @@ namespace FreeLux
                     Actions.AutoShieldSelf();
             }
 
-            //Console.Clear();
+            Console.Clear();
         }
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -165,7 +166,6 @@ namespace FreeLux
             bool drawW = Menu.Item("drawW").GetValue<bool>();
             bool drawE = Menu.Item("drawE").GetValue<bool>();
             bool drawR = Menu.Item("drawR").GetValue<bool>();
-            bool drawMinimapR = Menu.Item("drawMinimapR").GetValue<bool>();
             bool drawCurrentMode = Menu.Item("drawCurrentMode").GetValue<bool>();
 
             Color color = Color.Green;
@@ -222,11 +222,14 @@ namespace FreeLux
                         MathHelper.GetDamageString(hero));
                 }
             }
-
-            // I think this will draw the range of Final Spark on the minimap?
-            if (/*Player.Level >= 6 &&*/ drawMinimapR)
-                Utility.DrawCircle(playerPosition, R.Range, Color.DeepSkyBlue, 2, 30, true);
             
+        }
+
+        static void Drawing_OnEndScene(EventArgs args)
+        {
+            bool drawMinimapR = Menu.Item("drawMinimapR").GetValue<bool>();
+            if (Player.Level >= 6 && drawMinimapR)
+                Utility.DrawCircle(ObjectManager.Player.Position, R.Range, Color.DeepSkyBlue, 2, 30, true);
         }
     }
 }

@@ -91,7 +91,7 @@ namespace FreeLux
             else if (enemy.Health < GetComboDamage(enemy))
                 str = "Full Combo Kill! " + ((debug) ? ((int)GetComboDamage(enemy)).ToString() : "");
             else
-                str = "Cannot Kill! " + ((debug) ? ((int)GetComboDamage(enemy)).ToString() : "");
+                str = "Harass! " + ((debug) ? ((int)GetComboDamage(enemy)).ToString() : "");
             return str;
         }
 

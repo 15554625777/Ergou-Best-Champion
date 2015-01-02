@@ -74,18 +74,18 @@ namespace FreeLux
         {
             Initialize();
 
-            potionMenu.AddItem(new MenuItem("potionHpEnabled", "使用紅藥").SetValue(true));
-            potionMenu.AddItem(new MenuItem("potionHpPercentage", "使用紅藥 %").SetValue(new Slider(40)));
+            potionMenu.AddItem(new MenuItem("potionHpEnabled", "Use HP Potion").SetValue(true));
+            potionMenu.AddItem(new MenuItem("potionHpPercentage", "Use HP Potion at %").SetValue(new Slider(40)));
 
-            potionMenu.AddItem(new MenuItem("potionMpEnabled", "使用藍藥").SetValue(true));
-            potionMenu.AddItem(new MenuItem("potionMpPercentage", "使用藍藥 %").SetValue(new Slider(40)));
+            potionMenu.AddItem(new MenuItem("potionMpEnabled", "Use MP Potion").SetValue(true));
+            potionMenu.AddItem(new MenuItem("potionMpPercentage", "Use MP Potion at %").SetValue(new Slider(40)));
 
             Game.OnGameUpdate += OnGameUpdate;
         }
 
         private static void OnGameUpdate(EventArgs args)
         {
-            if (FreeLux.Player.IsRecalling() || Utility.InFountain() && Utility.InShopRange())
+            if (FreeLux.Player.IsRecalling() || ObjectManager.Player.InFountain() && ObjectManager.Player.InShop())
                 return;
 
             bool useHP = FreeLux.Menu.Item("potionHpEnabled").GetValue<bool>();

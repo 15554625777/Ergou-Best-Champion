@@ -127,7 +127,7 @@ namespace FreeLux
                 // Also, make sure that the damage from the passive wouldn't do enough by itself to kill them
                 // And of course, only include the passive damage if they're in range to be auto attacked.
                 if (MathHelper.GetRDamage(rTarget) + ((HasIllumination(rTarget) && InAutoAttackRange(rTarget)) ? MathHelper.GetPassiveProcDamage() : 0.0d) >= rTarget.Health &&
-                   ((HasIllumination(rTarget) && InAutoAttackRange(rTarget)) ? MathHelper.GetPassiveProcDamage() : 0.0d) >= rTarget.Health &&
+                   ((HasIllumination(rTarget) && InAutoAttackRange(rTarget)) ? MathHelper.GetPassiveProcDamage() : 0.0d) <= rTarget.Health &&
                    !IsIgnited(rTarget) &&
                    onlyUseRToKill)
                 {
@@ -196,15 +196,20 @@ namespace FreeLux
 
         public static void KillSteal()
         {
-            if (FreeLux.R.IsReady())
+            if (FreeLux.Menu.Item("RKillSteal").GetValue<bool>() && FreeLux.R.IsReady())
             {
                 var ksTargets =
                     ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(a => a.IsEnemy && a.Distance(FreeLux.Player.Position) < FreeLux.R.Range)
+                        .Where(a => !a.IsZombie)
+                        .Where(a => a.IsValidTarget())
+                        .Where(a => a.Distance(FreeLux.Player.Position) < FreeLux.R.Range)
+                        .Where(a => a.Distance(FreeLux.Player.Position) > GetOwnAutoAttackRange())
                         .OrderBy(a => a.HealthPercentage());
                         //.FirstOrDefault();
                 foreach (var target in ksTargets)
                 {
+                    if (target == null)
+                        continue;
                     if (MathHelper.GetRDamage(target) >= target.Health && !IsIgnited(target))
                     {
                         CastR(target);
@@ -365,7 +370,7 @@ namespace FreeLux
 
         // Q Logic from ChewyMoonsLux/Mid or Feed <3
         // Source: https://github.com/ChewyMoon/ChewyMoonScripts/
-        public static Spell.CastStates CastQ(Obj_AI_Hero target, HitChance hitChance = HitChance.Medium)
+        public static Spell.CastStates CastQ(Obj_AI_Hero target)
         {
             var prediction = FreeLux.Q.GetPrediction(target);
             var col = FreeLux.Q.GetCollision(FreeLux.Player.ServerPosition.To2D(), new List<Vector2> { prediction.CastPosition.To2D() });
@@ -389,7 +394,7 @@ namespace FreeLux
             return Spell.CastStates.SuccessfullyCasted;
         }
 
-        public static Spell.CastStates CastR(Obj_AI_Hero target, HitChance hitChance = HitChance.High)
+        public static Spell.CastStates CastR(Obj_AI_Hero target)
         {
             var prediction = FreeLux.R.GetPrediction(target, true);
             FreeLux.R.Cast(prediction.CastPosition, FreeLux.PacketCast);
