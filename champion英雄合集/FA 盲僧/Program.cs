@@ -81,14 +81,12 @@ namespace FuckingAwesomeLeeSin
             R = new Spell(SpellSlot.R, 375);
             Q.SetSkillshot(Q.Instance.SData.SpellCastTime, Q.Instance.SData.LineWidth, Q.Instance.SData.MissileSpeed,true,SkillshotType.SkillshotLine);
             //Base menu
-            Menu = new Menu("FALeeSin", ChampName, true);
-            //Orbwalker and menu
             Menu = new Menu("FA盲僧", ChampName, true);
             //Orbwalker and menu
             Menu.AddSubMenu(new Menu("走砍", "Orbwalker"));
             Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
             //Target selector and menu
-            var ts = new Menu("目标 选择", "Target Selector");
+            var ts = new Menu("目标选择", "Target Selector");
             TargetSelector.AddToMenu(ts);
             Menu.AddSubMenu(ts);
             //Combo menu
@@ -103,12 +101,13 @@ namespace FuckingAwesomeLeeSin
             Menu.SubMenu("Combo").AddItem(new MenuItem("ksR", "使用 R 抢人头").SetValue(false));
             Menu.SubMenu("Combo").AddItem(new MenuItem("starCombo", "开始 连招").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
             Menu.SubMenu("Combo").AddItem(new MenuItem("random2ejwej", "W->Q->R->Q2"));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("aaStacks", "等待 被动").SetValue(false));
 
             var harassMenu = new Menu("骚扰", "Harass");
             harassMenu.AddItem(new MenuItem("q1H", "使用 Q1").SetValue(true));
             harassMenu.AddItem(new MenuItem("q2H", "使用 Q2").SetValue(true));
-            harassMenu.AddItem(new MenuItem("wH", "顺眼|W逃跑{受伤}").SetValue(false));
-            harassMenu.AddItem(new MenuItem("eH", "使用 E1").SetValue(true));
+            harassMenu.AddItem(new MenuItem("wH", "顺眼|W逃跑{受伤}").SetValue(true));
+            harassMenu.AddItem(new MenuItem("eH", "使用 E1").SetValue(false));
             Menu.AddSubMenu(harassMenu);
 
             //Jung/Wave Clear
@@ -168,17 +167,18 @@ namespace FuckingAwesomeLeeSin
 
             var drawMenu = new Menu("范围", "Drawing");
             drawMenu.AddItem(new MenuItem("DrawEnabled", "启用 范围").SetValue(false));
+            drawMenu.AddItem(new MenuItem("insecDraw", "显示 回旋踢 位置").SetValue(true));
             drawMenu.AddItem(new MenuItem("WJDraw", "显示 瞬眼 范围").SetValue(true));
             drawMenu.AddItem(new MenuItem("drawQ", "显示 Q 范围").SetValue(true));
             drawMenu.AddItem(new MenuItem("drawW", "显示 W 范围").SetValue(true));
             drawMenu.AddItem(new MenuItem("drawE", "显示 E 范围").SetValue(true));
-            drawMenu.AddItem(new MenuItem("drawR", "显示 R 范围").SetValue(true));
+            drawMenu.AddItem(new MenuItem("drawR", "Draw R 范围").SetValue(true));
             Menu.AddSubMenu(drawMenu);
 
             //Exploits
             var miscMenu = new Menu("杂项", "Misc");
-            miscMenu.AddItem(new MenuItem("NFE", "使用 封包").SetValue(true));
-            miscMenu.AddItem(new MenuItem("QHC", "Q 命中率").SetValue(new StringList(new []{"低", "中", "高"}, 1)));
+            miscMenu.AddItem(new MenuItem("NFE", "使用 封包?").SetValue(true));
+            miscMenu.AddItem(new MenuItem("QHC", "Q 命中率").SetValue(new StringList(new []{"LOW", "MEDIUM", "HIGH"}, 1)));
             miscMenu.AddItem(new MenuItem("IGNks", "使用 点燃").SetValue(true));
             miscMenu.AddItem(new MenuItem("qSmite", "惩戒 Q!").SetValue(true));
             Menu.AddSubMenu(miscMenu);
