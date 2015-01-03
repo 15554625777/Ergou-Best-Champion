@@ -18,76 +18,76 @@ namespace MasterActivator
         private Obj_AI_Hero target;
         
         // leagueoflegends.wikia.com/
-        MItem qss = new MItem("Quicksilver Sash", "Ê∞¥Èì∂È•∞Â∏¶", "qss", 3140, ItemTypeId.Purifier);
-        MItem mercurial = new MItem("ItemMercurial", "Ê∞¥Èì∂ÂºØÂàÄ", "mercurial", 3139, ItemTypeId.Purifier);
-        MItem bilgewater = new MItem("BilgewaterCutlass", "Â∞èÂºØÂàÄ", "bilge", 3144, ItemTypeId.Offensive, 450);
-        MItem king = new MItem("ItemSwordOfFeastAndFamine", "Á†¥Ë¥•", "king", 3153, ItemTypeId.Offensive, 450);
-        MItem youmus = new MItem("Youmuu's Ghostblade", "ÂπΩÊ¢¶", "youmus", 3142, ItemTypeId.Offensive);
-        MItem tiamat = new MItem("ItemTiamatCleave", "Êèê‰∫öÈ©¨Áâπ", "tiamat", 3077, ItemTypeId.Offensive, 400);
-        MItem hydra = new MItem("Ravenous Hydra", "‰πùÂ§¥Ëõá", "hydra", 3074, ItemTypeId.Offensive, 400);
-        MItem dfg = new MItem("DeathfireGrasp", "ÂÜ•ÁÅ´", "dfg", 3128, ItemTypeId.Offensive, 750);
-        MItem divine = new MItem("ItemSoTD", "Á•ûÂú£‰πãÂâë", "divine", 3131, ItemTypeId.Offensive); //Sword of the Divine
-        MItem hextech = new MItem("Hextech Gunblade", "ÁßëÊäÄÊû™", "hextech", 3146, ItemTypeId.Offensive, 700);
-        MItem muramana = new MItem("Muramana", "È≠îÂàá", "muramana", 3042, ItemTypeId.Buff);
-        MItem seraph = new MItem("ItemSeraphsEmbrace", "ÁÇΩÂ§©‰Ωø", "seraph", 3040, ItemTypeId.Deffensive);
-        MItem zhonya = new MItem("Zhonya's Hourglass", "‰∏≠‰∫ö", "zhonya", 3157, ItemTypeId.Deffensive);
-        MItem randuin = new MItem("RanduinsOmen", "ÂÖ∞Áõæ", "randuin", 3143, ItemTypeId.OffensiveAOE, 500);
+        MItem qss = new MItem("Quicksilver Sash", "ÀÆ“¯ Œ¥¯", "qss", 3140, ItemTypeId.Purifier);
+        MItem mercurial = new MItem("Mercurial Scimitar", "ÀÆ“¯Õ‰µ∂", "mercurial", 3139, ItemTypeId.Purifier);
+        MItem bilgewater = new MItem("Bilgewater Cutlass", "–°Õ‰µ∂", "bilge", 3144, ItemTypeId.Offensive, 450);
+        MItem king = new MItem("Blade of the Ruined King", "∆∆∞‹", "king", 3153, ItemTypeId.Offensive, 450);
+        MItem youmus = new MItem("Youmuu's Ghostblade", "”ƒ√Œ", "youmus", 3142, ItemTypeId.Offensive);
+        MItem tiamat = new MItem("Tiamat", "Ã·—«¬ÌÃÿ", "tiamat", 3077, ItemTypeId.Offensive, 400);
+        MItem hydra = new MItem("Ravenous Hydra", "æ≈Õ∑…ﬂ", "hydra", 3074, ItemTypeId.Offensive, 400);
+        MItem dfg = new MItem("Deathfire Grasp", "⁄§ª", "dfg", 3128, ItemTypeId.Offensive, 750);
+        MItem divine = new MItem("Sword of the Divine", "…Ò •÷ÆΩ£", "divine", 3131, ItemTypeId.Offensive);
+        MItem hextech = new MItem("Hextech Gunblade", "ø∆ºº«π", "hextech", 3146, ItemTypeId.Offensive, 700);
+        MItem muramana = new MItem("Muramana", "ƒß◊⁄", "muramana", 3042, ItemTypeId.Buff);
+        MItem seraph = new MItem("Seraph's Embrace", "≥„ÃÏ π", "seraph", 3040, ItemTypeId.Deffensive);
+        MItem zhonya = new MItem("Zhonya's Hourglass", "÷–—«", "zhonya", 3157, ItemTypeId.Deffensive);
+        MItem randuin = new MItem("RanduinsOmen", "¿º∂‹", "randuin", 3143, ItemTypeId.OffensiveAOE, 500);
         //Item banner = new Item("Banner of Command", "BoCommand", "banner", 3060); // falta range
-        MItem mountain = new MItem("Face of the Mountain", "Â±±Â≤≥‰πãÂÆπ", "mountain", 3401, ItemTypeId.Deffensive, 700); // falta range
-        MItem frost = new MItem("Frost Queen's Claim", "ÂÜ∞ÈúúÂ•≥Áéã", "frost", 3092, ItemTypeId.OffensiveAOE, 850);
-        MItem solari = new MItem("Locket of the Iron Solari", "Èí¢ÈìÅÁÉàÈò≥‰πãÂå£", "solari", 3190, ItemTypeId.Deffensive, 600);
-        MItem mikael = new MItem("Mikael's Crucible", "Âù©Âüö", "mikael", 3222, ItemTypeId.Purifier, 750);
+        MItem mountain = new MItem("Face of the Mountain", "…Ω‘¿÷Æ»›", "mountain", 3401, ItemTypeId.Deffensive, 700); // falta range
+        MItem frost = new MItem("Frost Queen's Claim", "±˘À™≈ÆÕı÷∏¡Ó", "frost", 3092, ItemTypeId.OffensiveAOE, 850);
+        MItem solari = new MItem("Locket of the Iron Solari", "∏÷Ã˙¡“—Ù÷Æœª", "solari", 3190, ItemTypeId.Deffensive, 600);
+        MItem mikael = new MItem("Mikael's Crucible", "€·€ˆ", "mikael", 3222, ItemTypeId.Purifier, 750);
         //Item talisman = new Item("Talisman of Ascension", "Talisman", "talisman", 3069, 600);
         //Item shadows = new Item("Twin Shadows", "Shadows", "shadows", 3023, 750); //2700
         //Item ohmwrecker = new Item("Ohmwrecker", "Ohmwrecker", "ohmwrecker", 3056, 775); // tower atk range Utility.UnderTurret
-        MItem hpPot = new MItem("Health Potion", "Á∫¢ËçØ", "hpPot", 2003, ItemTypeId.HPRegenerator);
-        MItem manaPot = new MItem("Mana Potion", "ËìùËçØ", "manaPot", 2004, ItemTypeId.ManaRegenerator);
-        MItem biscuit = new MItem("Total Biscuit of Rejuvenation", "È•ºÂπ≤", "biscuit", 2010, ItemTypeId.HPRegenerator);
+        MItem hpPot = new MItem("Health Potion", "∫Ï“©", "hpPot", 2003, ItemTypeId.HPRegenerator);
+        MItem manaPot = new MItem("Mana Potion", "¿∂“©", "manaPot", 2004, ItemTypeId.ManaRegenerator);
+        MItem biscuit = new MItem("Total Biscuit of Rejuvenation", "±˝∏…", "biscuit", 2010, ItemTypeId.HPRegenerator);
 
         // Heal prioritizes the allied champion closest to the cursor at the time the ability is cast.
         // If no allied champions are near the cursor, Heal will target the most wounded allied champion in range.
-        MItem heal = new MItem("Heal", "Ê≤ªÁñóÊúØ", "SummonerHeal", 0, ItemTypeId.DeffensiveSpell, 700); // 300? www.gamefaqs.com/pc/954437-league-of-legends/wiki/3-1-summoner-spells
+        MItem heal = new MItem("Heal", "÷Œ¡∆ ı", "SummonerHeal", 0, ItemTypeId.DeffensiveSpell, 700); // 300? www.gamefaqs.com/pc/954437-league-of-legends/wiki/3-1-summoner-spells
         //MItem exhaust = new MItem("Exhaust", "Exhaust", "SummonerExhaust", 0, ItemTypeId.OffensiveSpell, ???);
-        MItem barrier = new MItem("Barrier", "Â±èÈöú", "SummonerBarrier", 0, ItemTypeId.DeffensiveSpell);
-        MItem cleanse = new MItem("Cleanse", "ÂáÄÂåñ", "SummonerBoost", 0, ItemTypeId.PurifierSpell);
-        MItem clarity = new MItem("Clarity", "Ê∏ÖÊô∞", "SummonerMana", 0, ItemTypeId.ManaRegeneratorSpell, 600);
-        MItem ignite = new MItem("Ignite", "ÁÇπÁáÉ", "SummonerDot", 0, ItemTypeId.OffensiveSpell, 600);
-        MItem smite = new MItem("Smite", "ÊÉ©Êàí", "SummonerSmite", 0, ItemTypeId.OffensiveSpell, 750);
-        MItem smiteAOE = new MItem("SmiteAOE", "ÊÉ©Êàí AOE", "itemsmiteaoe", 0, ItemTypeId.OffensiveSpell, 750);
-        MItem smiteDuel = new MItem("SmiteDuel", "ÊÉ©Êàí Duel", "s5_summonersmiteduel", 0, ItemTypeId.OffensiveSpell, 750);
-        MItem smiteQuick = new MItem("SmiteQuick", "ÊÉ©Êàí Quick", "s5_summonersmitequick", 0, ItemTypeId.OffensiveSpell, 750);
-        MItem smiteGanker = new MItem("SmiteGanker", "ÊÉ©Êàí Ganker", "s5_summonersmiteplayerganker", 0, ItemTypeId.OffensiveSpell, 750);
+        MItem barrier = new MItem("Barrier", "∆¡’œ", "SummonerBarrier", 0, ItemTypeId.DeffensiveSpell);
+        MItem cleanse = new MItem("Cleanse", "æªªØ", "SummonerBoost", 0, ItemTypeId.PurifierSpell);
+        MItem clarity = new MItem("Clarity", "«ÂŒ˙", "SummonerMana", 0, ItemTypeId.ManaRegeneratorSpell, 600);
+        MItem ignite = new MItem("Ignite", "µ„»º", "SummonerDot", 0, ItemTypeId.OffensiveSpell, 600);
+        MItem smite = new MItem("Smite", "≥ÕΩ‰", "SummonerSmite", 0, ItemTypeId.OffensiveSpell, 750);
+        MItem smiteAOE = new MItem("SmiteAOE", "≥ÕΩ‰ AOE", "itemsmiteaoe", 0, ItemTypeId.OffensiveSpell, 750);
+        MItem smiteDuel = new MItem("SmiteDuel", "≥ÕΩ‰ Duel", "s5_summonersmiteduel", 0, ItemTypeId.OffensiveSpell, 750);
+        MItem smiteQuick = new MItem("SmiteQuick", "≥ÕΩ‰ Quick", "s5_summonersmitequick", 0, ItemTypeId.OffensiveSpell, 750);
+        MItem smiteGanker = new MItem("SmiteGanker", "≥ÕΩ‰ Ganker", "s5_summonersmiteplayerganker", 0, ItemTypeId.OffensiveSpell, 750);
 
         // Auto shields 
-        MItem blackshield = new MItem("BlackShield", "Black Shield", "bShield", 0, ItemTypeId.Ability, 750, SpellSlot.E);
+        MItem blackshield = new MItem("BlackShield", "Black Shield", "bShield", 0, ItemTypeId.TeamAbility, 750, SpellSlot.E); //Morgana
         MItem unbreakable = new MItem("BraumE", "Unbreakable", "unbreak", 0, ItemTypeId.Ability, int.MaxValue, SpellSlot.E);
         MItem palecascade = new MItem("DianaOrbs", "Pale Cascade", "cascade", 0, ItemTypeId.Ability, int.MaxValue, SpellSlot.W);
-        MItem bulwark = new MItem("GalioBulwark", "Bulwark", "bulwark", 0, ItemTypeId.Ability, 800, SpellSlot.W);
+        MItem bulwark = new MItem("GalioBulwark", "Bulwark", "bulwark", 0, ItemTypeId.TeamAbility, 800, SpellSlot.W);
         MItem courage = new MItem("GarenW", "Courage", "courage", 0, ItemTypeId.Ability, int.MaxValue, SpellSlot.W);
-        MItem eyeofstorm = new MItem("EyeOfTheStorm", "Eye of the Storm", "storm", 0, ItemTypeId.Ability, 800, SpellSlot.E);
-        MItem inspire = new MItem("KarmaSolKimShield", "Inspire", "inspire", 0, ItemTypeId.Ability, 800, SpellSlot.E);
-        MItem helppix = new MItem("LuluE", "Help Pix!", "pix", 0, ItemTypeId.Ability, 650, SpellSlot.E);
-        MItem prismaticbarrier = new MItem("LuxPrismaticWave", "Prismatic Barrier", "pBarrier", 0, ItemTypeId.Ability, 1075, SpellSlot.W);
+        MItem eyeofstorm = new MItem("EyeOfTheStorm", "Eye of the Storm", "storm", 0, ItemTypeId.Ability, 800, SpellSlot.E); //Janna
+        MItem inspire = new MItem("KarmaSolKimShield", "Inspire", "inspire", 0, ItemTypeId.TeamAbility, 800, SpellSlot.E);
+        MItem helppix = new MItem("LuluE", "Help Pix!", "pix", 0, ItemTypeId.TeamAbility, 650, SpellSlot.E);
+        MItem prismaticbarrier = new MItem("LuxPrismaticWave", "Prismatic Barrier", "pBarrier", 0, ItemTypeId.TeamAbility, 1075, SpellSlot.W);
         MItem titanswraith = new MItem("NautilusPiercingGaze", "Titans Wraith", "tWraith", 0, ItemTypeId.Ability, int.MaxValue, SpellSlot.W);
-        MItem commandprotect = new MItem("OrianaRedactCommand", "Command Protect", "cProt", 0, ItemTypeId.Ability, 1100, SpellSlot.E);
+        MItem commandprotect = new MItem("OrianaRedactCommand", "Command Protect", "cProt", 0, ItemTypeId.TeamAbility, 1100, SpellSlot.E);
         MItem feint = new MItem("feint", "Feint", "feint", 0, ItemTypeId.Ability, int.MaxValue, SpellSlot.W);
         MItem spellshield = new MItem("SivirE", "SpellShield", "sShield", 0, ItemTypeId.Ability, int.MaxValue, SpellSlot.E);
 
         // Jungle Minions
-        MMinion blue = new MMinion("SRU_Blue", "Ëìùbuff", 6, 143);
-        MMinion red = new MMinion("SRU_Red", "Á∫¢buff", 6, 143);
-        MMinion dragon = new MMinion("SRU_Dragon", "Â∞èÈæô", 6, 143);
-        MMinion baron = new MMinion("SRU_Baron", "Â§ßÈæô", -18, 192);
-        MMinion wolf = new MMinion("SRU_Murkwolf", "ÊöóÂΩ±Áãº", 41, 74);
-        MMinion razor = new MMinion("SRU_Razorbeak", "ÈîãÂïÑÈ∏ü", 39, 74); // Ghosts
-        MMinion krug = new MMinion("SRU_Krug", "È≠îÊ≤ºËõô", 38, 80);
-        MMinion crab = new MMinion("Sru_Crab", "Ê≤≥Ëüπ", 43, 62);
-        MMinion gromp = new MMinion("SRU_Gromp", "Áü≥Áî≤Ëô´", 32, 87); // Ghost
+        MMinion blue = new MMinion("SRU_Blue", "¿∂buff", 6, 143);
+        MMinion red = new MMinion("SRU_Red", "∫Ïbuff", 6, 143);
+        MMinion dragon = new MMinion("SRU_Dragon", "–°¡˙", 6, 143);
+        MMinion baron = new MMinion("SRU_Baron", "¥Û¡˙", -18, 192);
+        MMinion wolf = new MMinion("SRU_Murkwolf", "∞µ”∞¿«buff", 41, 74);
+        MMinion razor = new MMinion("SRU_Razorbeak", "∑Ê◊ƒƒÒbuff", 39, 74); // Ghosts
+        MMinion krug = new MMinion("SRU_Krug", "ƒß’”Õ‹buff", 38, 80);
+        MMinion crab = new MMinion("Sru_Crab", "∫”–∑buff", 43, 62);
+        MMinion gromp = new MMinion("SRU_Gromp", " Øº◊≥Êbuff", 32, 87); // Ghost
 
-        MMinion tVilemaw = new MMinion("TT_Spiderboss", "Â∞èÂπΩÁÅµ", 45, 67);
-        MMinion tWraith = new MMinion("TT_NWraith", "Â§ßÂπΩÁÅµ", 45, 67);
-        MMinion tGolem = new MMinion("TT_NGolem", "Áü≥Â§¥‰∫∫", 45, 67);
-        MMinion tWolf = new MMinion("TT_NWolf", "‰∏âÁãº", 45, 67);
+        MMinion tVilemaw = new MMinion("TT_Spiderboss", "Vilemaw", 45, 67);
+        MMinion tWraith = new MMinion("TT_NWraith", "Wraith", 45, 67);
+        MMinion tGolem = new MMinion("TT_NGolem", "Golem", 45, 67);
+        MMinion tWolf = new MMinion("TT_NWolf", "Wolf", 45, 67);
 
         public MActivator()
         {
@@ -97,7 +97,7 @@ namespace MasterActivator
         private void onLoad(EventArgs args)
         {
             // Boas vindas
-            Game.PrintChat("<font color='#3BB9FF'>Master|Â®≤ËØ≤ÂØ≤ÈçìÂÄà - by Crisdmc ÂßπÂ§äÂØ≤byÊµúÂ≤ÄÂ´ç!QQÁºáÓò¢36163084 - </font>ÈçîÁä∫ÊµáÈé¥ÊÑ¨Âßõ!");
+             Game.PrintChat("<font color='#3BB9FF'>Master|Ê¥ªÂåñÂâÇ| - by Crisdmc Ê±âÂåñby‰∫åÁãó!QQÁæ§|36163084 - </font>Âä†ËΩΩÊàêÂäü!");
 
             try
             {
@@ -119,6 +119,7 @@ namespace MasterActivator
             try
             {
                 double incDmg = 0;
+                SpellSlot spellSlot = SpellSlot.Unknown;
                 //.GetValue<KeyBind>().Active
                 if (Config.Item("enabled").GetValue<KeyBind>().Active)
                 {
@@ -126,16 +127,27 @@ namespace MasterActivator
                     {
                         if (args.Target != null) // Check (spell w/o target) AOE etc?
                         {
-                            //Console.WriteLine("Target Name-> " + args.Target.Name);
-                            //Config.Item(hero.SkinName).GetValue<bool>()
+                            // TARGET SELF
+                            //if (attacker.Type == GameObjectType.obj_AI_Hero && attacker.IsEnemy && attacker.NetworkId == args.Target.NetworkId)
+                            //{
+                              //  Console.WriteLine("Target Name2-> " + args.Target.Name + "  Spell->" + args.SData.Name + "   SpellTT->" + args.SData.SpellTotalTime);
+                            //}
 
+                            //Config.Item(hero.SkinName).GetValue<bool>()
                             // 750 from greater range(mikael).
                             if (attacker.Type == GameObjectType.obj_AI_Hero && attacker.IsEnemy && args.Target.Type == GameObjectType.obj_AI_Hero && (args.Target.IsMe || (args.Target.IsAlly && _player.Distance(args.Target.Position) <= 750)))
                             {
                                 Obj_AI_Hero attackerHero = ObjectManager.Get<Obj_AI_Hero>().First(hero => hero.NetworkId == attacker.NetworkId);
                                 Obj_AI_Hero attackedHero = ObjectManager.Get<Obj_AI_Hero>().First(hero => hero.NetworkId == args.Target.NetworkId);
 
-                                SpellSlot spellSlot = Utility.GetSpellSlot(attackerHero, args.SData.Name);
+                                //foreach (var spellAA in attacker.Spellbook.Spells.Select((value, i) => new { i, value }))
+                                //{
+                                  //  Console.WriteLine("SName->" + spellAA.value.Name + "  SSlot->" + spellAA.value.Slot + "   new Slot CK->" + spellAA.i);
+                                //}
+
+                                SpellDataInst spellA = attacker.Spellbook.Spells.FirstOrDefault(hero=> args.SData.Name.Contains(hero.SData.Name));
+                               
+                                spellSlot = spellA == null ? SpellSlot.Unknown : spellA.Slot;
                                 SpellSlot igniteSlot = Utility.GetSpellSlot(attackerHero, ignite.menuVariable);
 
                                 if (igniteSlot != SpellSlot.Unknown && spellSlot == igniteSlot)
@@ -170,8 +182,8 @@ namespace MasterActivator
                                 {
                                     incDmg = Damage.GetSpellDamage(attackerHero, attackedHero, spellSlot);
                                 }
-                                    
-                                //Console.WriteLine(spellSlot + "  inc-> " + incDmg + " Spell-> " + args.SData.Name + " Inc2-> " + incDmg2);// 44 = sivir w, 49 = YasuoBasicAttack3, 50 YassuoCritAttack, 45 = LeonaShieldOfDaybreakAttack
+
+                                //Console.WriteLine("Slot->" + spellSlot + "  inc-> " + incDmg + " Spell-> " + args.SData.Name);// 44 = sivir w, 49 = YasuoBasicAttack3, 50 YassuoCritAttack, 45 = LeonaShieldOfDaybreakAttack
                             }
                             else if (attacker.Type == GameObjectType.obj_AI_Turret && attacker.IsEnemy && args.Target.Type == GameObjectType.obj_AI_Hero && (args.Target.IsAlly && _player.Distance(args.Target.Position) <= 750))
                             {
@@ -179,24 +191,27 @@ namespace MasterActivator
                                 // TODO: Get multiplier/real dmg
                                 incDmg = attacker.BaseAttackDamage;
                                 Obj_AI_Hero attackedHero = ObjectManager.Get<Obj_AI_Hero>().First(hero => hero.NetworkId == args.Target.NetworkId);
-                                //Console.WriteLine("Base->" + attacker.BaseAttackDamage + "   Tower Dmg-> " + Damage.GetAutoAttackDamage(attacker, attackedHero, true));
+                                //Console.WriteLine("Base->" + attacker.BaseAttackDamage + "   Tower Dmg-> " + Damage.GetAutoAttackDamage(attacker, attackedHero, true) + "   " + Damage.GetAutoAttackDamage(attacker, attackedHero));
                             }
                         }
                     }
-                    if (incDmg > 0)
+
+                    if (incDmg > 0 || spellSlot != SpellSlot.Unknown)
                     {
                         if (args.Target.Team == _player.Team)
                         {
+                            Obj_AI_Hero attackedHero = ObjectManager.Get<Obj_AI_Hero>().First(hero => hero.NetworkId == args.Target.NetworkId);
+
                             teamCheckAndUse(heal, Config.Item("useWithHealDebuff").GetValue<bool>() ? "" : "summonerhealcheck", false, incDmg);
                             teamCheckAndUse(solari, "", true, incDmg);
                             teamCheckAndUse(mountain, "", false, incDmg);
+                            checkAndUseShield(incDmg, attacker, attackedHero, spellSlot);
 
                             if (args.Target.IsMe)
                             {
                                 checkAndUse(zhonya, "", incDmg);
                                 checkAndUse(barrier, "", incDmg);
                                 checkAndUse(seraph, "", incDmg);
-                                checkAndUseShield(incDmg);
                             }
                         }
                     }
@@ -286,6 +301,7 @@ namespace MasterActivator
                         checkAndUse(seraph);
                         teamCheckAndUse(solari, "", true);
                         teamCheckAndUse(mountain);
+                        checkAndUseShield();
                     }
 
                     checkAndUse(smite);
@@ -323,20 +339,77 @@ namespace MasterActivator
             checkAndUse(randuin);
         }
 
-        private void checkAndUseShield(double incDmg)
+        // And about ignore HP% check?
+        private void justUseAgainstCheck(MItem item, double incDmg, Obj_AI_Base attacker = null, Obj_AI_Base attacked = null, SpellSlot attackerSpellSlot = SpellSlot.Unknown)
         {
-            checkAndUse(titanswraith, "", incDmg);
-            checkAndUse(blackshield, "", incDmg);
-            checkAndUse(unbreakable, "", incDmg);
-            checkAndUse(palecascade, "", incDmg);
-            checkAndUse(bulwark, "", incDmg);
-            checkAndUse(courage, "", incDmg);
-            checkAndUse(eyeofstorm, "", incDmg);
-            checkAndUse(inspire, "", incDmg);
-            checkAndUse(helppix, "", incDmg);
-            checkAndUse(prismaticbarrier, "", incDmg);
-            checkAndUse(commandprotect, "", incDmg);
-            checkAndUse(spellshield, "", incDmg);
+            //Console.WriteLine("… PLAYER");
+            // Se tem o spell
+            if (Utility.GetSpellSlot(_player, item.name, false) != SpellSlot.Unknown)
+            {
+                if (attacker != null)
+                {
+                    // player
+                    if (attacker.Type == GameObjectType.obj_AI_Hero)
+                    {
+                        // Se estiver habilitado para o determinado player
+                        //Console.WriteLine(item.menuVariable + attacker.BaseSkinName);
+                        if (Config.Item(item.menuVariable + attacker.BaseSkinName).GetValue<bool>())
+                        {
+                            //Console.WriteLine("Player habilitado->" + attacker.BaseSkinName);
+                            if (attackerSpellSlot != SpellSlot.Unknown)
+                            {
+                                // Se a habilidade estiver habilitada
+                                if (Config.Item(attackerSpellSlot + item.menuVariable + attacker.BaseSkinName).GetValue<bool>())
+                                {
+                                    //Console.WriteLine("Usar na hab-> " + attackerSpellSlot + "  para->" + attacked.Name);
+                                    if (item.type == ItemTypeId.Ability)
+                                    {
+                                        checkAndUse(item, "", incDmg);
+                                    }
+                                    else
+                                    {
+                                        teamCheckAndUse(item, "", false, incDmg, attacked);
+                                    }
+                                }
+                                else
+                                {
+                                    //Console.WriteLine("N√O usar na hab-> " + attackerSpellSlot);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //Console.WriteLine("Player desabilitado->" + attacker.BaseSkinName);
+                            checkAndUse(item, "", incDmg);
+                        }
+                    }
+                    // tower
+                    else
+                    {
+                        //Console.WriteLine("… TORRE");
+                        if (Config.Item("tower" + item.menuVariable).GetValue<bool>())
+                        {
+                            checkAndUse(item, "", incDmg);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void checkAndUseShield(double incDmg = 0, Obj_AI_Base attacker = null, Obj_AI_Base attacked = null, SpellSlot attackerSpellSlot = SpellSlot.Unknown)
+        {
+            justUseAgainstCheck(titanswraith, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(blackshield, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(unbreakable, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(palecascade, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(bulwark, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(courage, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(eyeofstorm, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(inspire, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(helppix, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(prismaticbarrier, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(commandprotect, incDmg, attacker, attacked, attackerSpellSlot);
+            justUseAgainstCheck(spellshield, incDmg, attacker, attacked, attackerSpellSlot);
         }
 
         private bool checkBuff(String name)
@@ -350,18 +423,53 @@ namespace MasterActivator
 
         private void createMenuItem(MItem item, String parent, int defaultValue = 0, bool mana = false, int minManaPct = 0)
         {
-            if (item.type == ItemTypeId.Ability)
+            if (item.type == ItemTypeId.Ability || item.type == ItemTypeId.TeamAbility)
             {
                 var abilitySlot = Utility.GetSpellSlot(_player, item.name, false);
                 if (abilitySlot != SpellSlot.Unknown && abilitySlot == item.abilitySlot)
                 {
                     var menu = new Menu(item.menuName, "menu" + item.menuVariable);
                     menu.AddItem(new MenuItem(item.menuVariable, "Enable").SetValue(true));
-                    menu.AddItem(new MenuItem(item.menuVariable + "UseOnPercent", "Use on HP%")).SetValue(new Slider(defaultValue, 0, 100));
+                    menu.AddItem(new MenuItem(item.menuVariable + "UseOnPercent", " π”√ ◊ÓµÕHP%")).SetValue(new Slider(defaultValue, 0, 100));
                     if (minManaPct > 0)
                     {
-                        menu.AddItem(new MenuItem(item.menuVariable + "UseManaPct", "Min Mana%")).SetValue(new Slider(minManaPct, 0, 100));
+                        menu.AddItem(new MenuItem(item.menuVariable + "UseManaPct", " π”√ ◊ÓµÕMana%")).SetValue(new Slider(minManaPct, 0, 100));
                     }
+                    var menuUseAgainst = new Menu("Filter", "UseAgainst");
+                    menuUseAgainst.AddItem(new MenuItem("tower" + item.menuVariable, "Tower").SetValue(true));
+                    var enemyHero = from hero in ObjectManager.Get<Obj_AI_Hero>()
+                                   where hero.Team != _player.Team
+                                  select hero;
+
+                    if (enemyHero.Count() > 0)
+                    {
+                        foreach (Obj_AI_Hero hero in enemyHero)
+                        {
+                            var menuUseAgainstHero = new Menu(hero.BaseSkinName, "useAgainst" + hero.BaseSkinName);
+                            menuUseAgainstHero.AddItem(new MenuItem(item.menuVariable + hero.BaseSkinName, "Enabled").SetValue(false));
+                            menuUseAgainstHero.AddItem(new MenuItem(SpellSlot.Q + item.menuVariable + hero.BaseSkinName, "Q").SetValue(false));
+                            menuUseAgainstHero.AddItem(new MenuItem(SpellSlot.W + item.menuVariable + hero.BaseSkinName, "W").SetValue(false));
+                            menuUseAgainstHero.AddItem(new MenuItem(SpellSlot.E + item.menuVariable + hero.BaseSkinName, "E").SetValue(false));
+                            menuUseAgainstHero.AddItem(new MenuItem(SpellSlot.R + item.menuVariable + hero.BaseSkinName, "R").SetValue(false));
+                            menuUseAgainst.AddSubMenu(menuUseAgainstHero);
+                            // Bring all, passives, summoners spells, etc;
+                            /*if (hero.Spellbook.Spells.Count() > 0)
+                            {
+                                var menuUseAgainstHero = new Menu(hero.BaseSkinName, "useAgainst" + hero.BaseSkinName);
+                                menuUseAgainstHero.AddItem(new MenuItem(item.menuVariable, "Enable").SetValue(true));
+                                foreach(SpellDataInst spell in hero.Spellbook.Spells)
+                                {
+                                    menuUseAgainstHero.AddItem(new MenuItem("useAgainstSpell" + spell.Name, spell.Name).SetValue(true));
+                                }
+                                menuUseAgainst.AddSubMenu(menuUseAgainstHero);
+                            }
+                            else
+                            {
+                                Game.PrintChat("MasterActivator cant get " + hero.BaseSkinName + " spells!");
+                            }*/
+                        }
+                    }
+                    menu.AddSubMenu(menuUseAgainst);
                     Config.SubMenu(parent).AddSubMenu(menu);
                 }
             }
@@ -374,18 +482,18 @@ namespace MasterActivator
                 {
                     if (item.type == ItemTypeId.OffensiveAOE)
                     {
-                        menu.AddItem(new MenuItem(item.menuVariable + "UseXUnits", "‰ΩøÁî®ÔºàËã±ÈõÑÊï∞ÈáèÔºâ")).SetValue(new Slider(defaultValue, 1, 5));
+                        menu.AddItem(new MenuItem(item.menuVariable + "UseXUnits", " π”√∂‘œÛ ˝¡ø")).SetValue(new Slider(defaultValue, 1, 5));
                     }
                     else
                     {
-                        menu.AddItem(new MenuItem(item.menuVariable + "UseOnPercent", "‰ΩøÁî® " + (mana == false ? "Ë°ÄÈáè%" : "ËìùÈáè%"))).SetValue(new Slider(defaultValue, 0, 100));
+                        menu.AddItem(new MenuItem(item.menuVariable + "UseOnPercent", " π”√ " + (mana == false ? "%◊ÓµÕ—™¡ø" : "%◊ÓµÕ¿∂¡ø"))).SetValue(new Slider(defaultValue, 0, 100));
                     }
                 }
                 Config.SubMenu(parent).AddSubMenu(menu);
             }
         }
 
-        private void teamCheckAndUse(MItem item, String buff = "", bool self = false, double incDmg = 0)
+        private void teamCheckAndUse(MItem item, String buff = "", bool self = false, double incDmg = 0, Obj_AI_Base attacked = null)
         {
             if (Config.Item(item.menuVariable) != null)
             {
@@ -422,6 +530,41 @@ namespace MasterActivator
                                     }
                                 }
                             }
+                        }
+                    }
+                    else if (item.type == ItemTypeId.TeamAbility)
+                    {
+                        try
+                        {
+                            var spellSlot = Utility.GetSpellSlot(_player, item.name, false);
+                            if (spellSlot != SpellSlot.Unknown)
+                            {
+                                var activeAllyHeros = getActiveAllyHeros(item);
+                                if (activeAllyHeros.Count() > 0)
+                                {
+                                    if (_player.Spellbook.CanUseSpell(spellSlot) == SpellState.Ready)
+                                    {
+                                        int usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
+                                        int manaPercent = Config.Item(item.menuVariable + "UseManaPct") != null ? Config.Item(item.menuVariable + "UseManaPct").GetValue<Slider>().Value : 0;
+                                        foreach (Obj_AI_Hero hero in activeAllyHeros)
+                                        {
+                                            if (hero.NetworkId == attacked.NetworkId)
+                                            {
+                                                int actualHeroHpPercent = (int)(((hero.Health - incDmg) / hero.MaxHealth) * 100); //after dmg not Actual ^^
+                                                int playerManaPercent = (int)((_player.Mana / _player.MaxMana) * 100);
+                                                if (playerManaPercent >= manaPercent && actualHeroHpPercent <= usePercent)
+                                                {
+                                                    _player.Spellbook.CastSpell(item.abilitySlot, hero);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            Game.PrintChat("Problem with MasterActivator(AutoShield).");
                         }
                     }
                     else
@@ -612,7 +755,7 @@ namespace MasterActivator
                             }
                         }
                     }
-                    else if (item.type == ItemTypeId.Ability)
+                    else if (item.type == ItemTypeId.Ability || item.type == ItemTypeId.TeamAbility)
                     {
                         try
                         {
@@ -783,29 +926,29 @@ namespace MasterActivator
 
         private void createMenu()
         {
-            Config = new Menu("MasterÊ¥ªÂåñÂâÇ", "masterActivator", true);
+            Config = new Menu("MasterªÓªØº¡", "masterActivator", true);
 
-            Config.AddSubMenu(new Menu("ÂáÄÂåñÂô®", "purifiers"));
+            Config.AddSubMenu(new Menu("æªªØ∆˜", "purifiers"));
             createMenuItem(qss, "purifiers");
             createMenuItem(mercurial, "purifiers");
             createMenuItem(cleanse, "purifiers");
             createMenuItem(mikael, "purifiers");
-            Config.SubMenu("purifiers").AddItem(new MenuItem("defJustOnCombo", "ËøûÊãõÊó∂‰ΩøÁî®")).SetValue(true);
+            Config.SubMenu("purifiers").AddItem(new MenuItem("defJustOnCombo", "‘⁄¡¨’–÷– π”√")).SetValue(true);
 
-            Config.AddSubMenu(new Menu("ÂáÄÂåñÂºÇÂ∏∏Áä∂ÊÄÅ", "purify"));
-            Config.SubMenu("purify").AddItem(new MenuItem("blind", "Ëá¥Áõ≤")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("charm", "È≠ÖÊÉë")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("fear", "ÊÅêÊÉß")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("flee", "ÈÄÉË∑ë")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("snare", "Èô∑Èò±")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("taunt", "Âò≤ËÆΩ")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("suppression", "ÂéãÂà∂")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("stun", "Áú©Êôï")).SetValue(true);
-            Config.SubMenu("purify").AddItem(new MenuItem("polymorph", "ÂèòÂΩ¢")).SetValue(false);
-            Config.SubMenu("purify").AddItem(new MenuItem("silence", "Ê≤âÈªò")).SetValue(false);
+            Config.AddSubMenu(new Menu("æªªØ“Ï≥£◊¥Ã¨", "purify"));
+            Config.SubMenu("purify").AddItem(new MenuItem("blind", "÷¬√§")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("charm", "˜»ªÛ")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("fear", "ø÷æÂ")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("flee", "Ã”≈‹")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("snare", "œ›⁄Â")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("taunt", "≥∞∑Ì")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("suppression", "—π÷∆")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("stun", "—£‘Œ")).SetValue(true);
+            Config.SubMenu("purify").AddItem(new MenuItem("polymorph", "±‰–Œ")).SetValue(false);
+            Config.SubMenu("purify").AddItem(new MenuItem("silence", "≥¡ƒ¨")).SetValue(false);
 
-            Config.AddSubMenu(new Menu("ÊÉ©ÊàíÂØπË±°", "smiteCfg"));
-            var menuSmiteSpell = new Menu("Ê≥ïÊúØ", "smiteSpell");
+            Config.AddSubMenu(new Menu("≥ÕΩ‰∂‘œÛ", "smiteCfg"));
+            var menuSmiteSpell = new Menu("∑® ı", "smiteSpell");
             menuSmiteSpell.AddItem(new MenuItem(smite.menuVariable, smite.menuName).SetValue(true));
             menuSmiteSpell.AddItem(new MenuItem(smiteAOE.menuVariable, smiteAOE.menuName).SetValue(true));
             menuSmiteSpell.AddItem(new MenuItem(smiteDuel.menuVariable, smiteDuel.menuName).SetValue(true));
@@ -836,14 +979,14 @@ namespace MasterActivator
             }
             Config.SubMenu("smiteCfg").AddSubMenu(menuSmiteMobs);
 
-            var menuSmiteDraw = new Menu("ÊÉ©ÊàíËåÉÂõ¥", "smiteDraw");
-            menuSmiteDraw.AddItem(new MenuItem("dSmite", "ÂêØÁî®")).SetValue(true);
-            menuSmiteDraw.AddItem(new MenuItem("justAS", "Just Selected Mobs")).SetValue(false);
+            var menuSmiteDraw = new Menu("≥ÕΩ‰∑∂Œß", "smiteDraw");
+            menuSmiteDraw.AddItem(new MenuItem("dSmite", "∆Ù”√")).SetValue(true);
+            menuSmiteDraw.AddItem(new MenuItem("justAS", "—°∂®ƒ£ Ω")).SetValue(false);
             Config.SubMenu("smiteCfg").AddSubMenu(menuSmiteDraw);
 
-            Config.AddSubMenu(new Menu("ÊîªÂáªÁâ©ÂìÅ", "offensive"));
+            Config.AddSubMenu(new Menu("π•ª˜ŒÔ∆∑", "offensive"));
             createMenuItem(ignite, "offensive");
-            Config.SubMenu("offensive").SubMenu("menu" + ignite.menuVariable).AddItem(new MenuItem("overIgnite", "Over Ignite")).SetValue(false);
+            Config.SubMenu("offensive").SubMenu("menu" + ignite.menuVariable).AddItem(new MenuItem("overIgnite", "‘⁄µ„»º∫Û π”√")).SetValue(false);
             createMenuItem(youmus, "offensive", 100);
             createMenuItem(bilgewater, "offensive", 100);
             createMenuItem(king, "offensive", 100);
@@ -854,20 +997,20 @@ namespace MasterActivator
             createMenuItem(hextech, "offensive", 80);
             createMenuItem(muramana, "offensive", 80);
 
-            Config.AddSubMenu(new Menu("ÂÖ≥Èó≠. AOE", "offAOE"));
+            Config.AddSubMenu(new Menu("πÿ±’. AOE", "offAOE"));
             createMenuItem(frost, "offAOE", 2);
             createMenuItem(randuin, "offAOE", 1);
 
-            Config.AddSubMenu(new Menu("Èò≤Âæ°Áâ©ÂìÅ", "deffensive"));
+            Config.AddSubMenu(new Menu("∑¿”˘ŒÔ∆∑", "deffensive"));
             createMenuItem(barrier, "deffensive", 35);
             createMenuItem(seraph, "deffensive", 45);
             createMenuItem(zhonya, "deffensive", 35);
             createMenuItem(solari, "deffensive", 45);
             createMenuItem(mountain, "deffensive", 45);
-            Config.SubMenu("deffensive").AddItem(new MenuItem("justPred", "Just Predicted")).SetValue(true);
-            Config.SubMenu("deffensive").AddItem(new MenuItem("useRecalling", "Use Recalling")).SetValue(false);
+            Config.SubMenu("deffensive").AddItem(new MenuItem("justPred", "÷ª «‘§≤‚")).SetValue(true);
+            Config.SubMenu("deffensive").AddItem(new MenuItem("useRecalling", " π”√ ªÿ≥Ãing")).SetValue(false);
 
-            Config.AddSubMenu(new Menu("Ëá™Âä®Â∫áÊä§", "autoshield"));
+            Config.AddSubMenu(new Menu("◊‘∂Ø±”ª§", "autoshield"));
             createMenuItem(blackshield, "autoshield", 90, false, 40);
             createMenuItem(unbreakable, "autoshield", 90, false, 40);
             createMenuItem(bulwark, "autoshield", 90, false, 40);
@@ -881,16 +1024,16 @@ namespace MasterActivator
             createMenuItem(feint, "autoshield", 90, false, 0);
             createMenuItem(spellshield, "autoshield", 90, false, 0);
 
-            Config.AddSubMenu(new Menu("ËçØÂâÇÂ§ßÂ∏à", "regenerators"));
+            Config.AddSubMenu(new Menu("º”—™|º”¿∂", "regenerators"));
             createMenuItem(heal, "regenerators", 35);
-            Config.SubMenu("regenerators").SubMenu("menu" + heal.menuVariable).AddItem(new MenuItem("useWithHealDebuff", "Use with debuff")).SetValue(true);
-            Config.SubMenu("regenerators").SubMenu("menu" + heal.menuVariable).AddItem(new MenuItem("justPredHeal", "Just predicted")).SetValue(false);
+            Config.SubMenu("regenerators").SubMenu("menu" + heal.menuVariable).AddItem(new MenuItem("useWithHealDebuff", " π”√ debuff")).SetValue(true);
+            Config.SubMenu("regenerators").SubMenu("menu" + heal.menuVariable).AddItem(new MenuItem("justPredHeal", "÷ª «‘§≤‚")).SetValue(false);
             createMenuItem(clarity, "regenerators", 25, true);
             createMenuItem(hpPot, "regenerators", 55);
             createMenuItem(manaPot, "regenerators", 55, true);
             createMenuItem(biscuit, "regenerators", 55);
 
-            Config.AddSubMenu(new Menu("Âõ¢Èòü‰ΩøÁî®", "teamUseOn"));
+            Config.AddSubMenu(new Menu("Õ≈∂” π”√", "teamUseOn"));
 
             var allyHeros = from hero in ObjectManager.Get<Obj_AI_Hero>()
                             where hero.IsAlly == true
@@ -902,17 +1045,17 @@ namespace MasterActivator
             }
 
             // Combo mode
-            Config.AddSubMenu(new Menu("ËøûÊãõ Ê®°Âºè", "combo"));
-            Config.SubMenu("combo").AddItem(new MenuItem("comboModeActive", "Active")).SetValue(new KeyBind(32, KeyBindType.Press, true));
+            Config.AddSubMenu(new Menu("¡¨’–ƒ£ Ω", "combo"));
+            Config.SubMenu("combo").AddItem(new MenuItem("comboModeActive", "∆Ù”√")).SetValue(new KeyBind(32, KeyBindType.Press, true));
 
             // Target selector
-            Config.AddSubMenu(new Menu("ÁõÆÊ†á ÈÄâÊã©", "targetSelector"));
+            Config.AddSubMenu(new Menu("ƒø±Í—°‘Ò", "targetSelector"));
             TargetSelector.AddToMenu(Config.SubMenu("targetSelector"));
 
-            Config.AddItem(new MenuItem("predict", "È¢ÑÊµã DMG")).SetValue(true);
+            Config.AddItem(new MenuItem("predict", "‘§≤‚ DMG")).SetValue(true);
             //Config.AddItem(new MenuItem("enabled", "Enabled")).SetValue(true);
             //38
-            Config.AddItem(new MenuItem("enabled", "ÂêØÁî®Ê¥ªÂåñÂâÇ")).SetValue(new KeyBind("L".ToCharArray()[0], KeyBindType.Toggle, true));
+            Config.AddItem(new MenuItem("enabled", "π¶ƒ‹ø™∆Ùorπÿ±’")).SetValue(new KeyBind("L".ToCharArray()[0], KeyBindType.Toggle, true));
 
             Config.AddToMainMenu();
         }
