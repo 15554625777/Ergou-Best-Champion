@@ -116,6 +116,11 @@ namespace xSaliceReligionAIO
             menu.AddSubMenu(new Menu("封包 设置", "Packets"));
             menu.SubMenu("Packets").AddItem(new MenuItem("packet", "使用 封包").SetValue(false));
 
+            //Item Menu
+            var itemMenu = new Menu("物品和召唤师技能", "Items");
+            ActiveItems.AddToMenu(itemMenu);
+            menu.AddSubMenu(itemMenu);
+
             menu.AddToMainMenu();
 
             try
