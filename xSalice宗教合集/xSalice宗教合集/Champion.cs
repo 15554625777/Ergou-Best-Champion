@@ -73,7 +73,7 @@ namespace xSaliceReligionAIO
         public SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
         
         //items
-        public Items.Item DFG = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3188, 750) : new Items.Item(3128, 750);
+        public Items.Item DFG = Utility.Map.GetMap().Type == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3188, 750) : new Items.Item(3128, 750);
         public Items.Item Botrk = new Items.Item(3153, 450);
         public Items.Item Bilge = new Items.Item(3144, 450);
         public Items.Item Hex = new Items.Item(3146, 700);
@@ -114,7 +114,7 @@ namespace xSaliceReligionAIO
 
             //Packet Menu
             menu.AddSubMenu(new Menu("封包 设置", "Packets"));
-            menu.SubMenu("Packets").AddItem(new MenuItem("packet", "使用 封包").SetValue(false));
+            menu.SubMenu("Packets").AddItem(new MenuItem("packet", "Use Packets").SetValue(false));
 
             //Item Menu
             var itemMenu = new Menu("物品和召唤师技能", "Items");
@@ -127,7 +127,7 @@ namespace xSaliceReligionAIO
             {
                 if (Activator.CreateInstance(null, "xSaliceReligionAIO.Champions." + Player.ChampionName) != null)
                 {
-                    Game.PrintChat("<font color = \"#FFB6C1\">xSalice's " + Player.ChampionName + " 鍔犺浇鎴愬姛!</font>");
+                    Game.PrintChat("<font color = \"#FFB6C1\">xSalice's " + Player.ChampionName + "鍔犺浇鎴愬姛!</font>");
                 }
             }
             catch
@@ -379,12 +379,16 @@ namespace xSaliceReligionAIO
             return new object[3] { pointSegment, pointLine, isOnSegment };
         }
 
-        public void CastBasicSkillShot(Spell spell, float range, TargetSelector.DamageType type, HitChance hitChance)
+        public void CastBasicSkillShot(Spell spell, float range, TargetSelector.DamageType type, HitChance hitChance, bool towerCheck = false)
         {
             var target = TargetSelector.GetTarget(range, type);
 
             if (target == null || !spell.IsReady())
                 return;
+
+            if (towerCheck && target.UnderTurret(true))
+                return;
+
             spell.UpdateSourcePosition();
 
             if (spell.GetPrediction(target).Hitchance >= hitChance)
