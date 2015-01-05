@@ -27,7 +27,7 @@ namespace DZDraven_Reloaded
             Player = ObjectManager.Player;
             if(Player.ChampionName != "Draven")return;
 
-            Menu = new Menu("DZ191 德莱文", "DravenReloaded", true);
+          Menu = new Menu("DZ191 德莱文", "DravenReloaded", true);
             var xSLxMenu = new Menu("走砍", "Orbwalker1");
             xSLxOrbwalker.AddToMenu(xSLxMenu);
             Menu.AddSubMenu(xSLxMenu);
@@ -78,6 +78,7 @@ namespace DZDraven_Reloaded
             Menu.SubMenu("Misc").AddItem(new MenuItem("AntiGP", "防止突脸")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Interrupt", "中断法术").SetValue(true));
             Menu.SubMenu("Misc").AddItem(new MenuItem("WCatch", "使用W接斧头").SetValue(true));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("WCatchCombo", "W接斧头（仅连招使用）").SetValue(false));
 
             Menu.AddSubMenu(new Menu("[Draven]物品", "Items"));
             Menu.SubMenu("Items").AddItem(new MenuItem("BotrkC", "连招使用破败").SetValue(true));
@@ -98,7 +99,7 @@ namespace DZDraven_Reloaded
 
             Menu.AddSubMenu(new Menu("[Draven]范围", "Drawing"));
 
-            //Drawings Menu
+             //Drawings Menu
             Menu.SubMenu("Drawing").AddItem(new MenuItem("DrawE", "显示E范围").SetValue(new Circle(true, Color.MediumPurple)));
             Menu.SubMenu("Drawing").AddItem(new MenuItem("DrawCRange", "显示接斧头范围").SetValue(new Circle(true, Color.RoyalBlue)));
             Menu.SubMenu("Drawing").AddItem(new MenuItem("DrawRet", "显示十字线").SetValue(new Circle(true, Color.Yellow)));
@@ -215,6 +216,7 @@ namespace DZDraven_Reloaded
 
         public static PossibleReticle getClosestAxe(out bool useW)
         {
+            
             if (Axes.Count <= 0)
             {
                 useW = false;
@@ -222,7 +224,13 @@ namespace DZDraven_Reloaded
             }
             var CatchRange = Menu.Item("CatchRadius").GetValue<Slider>().Value;
             var UseW = isMenuEnabled("WCatch");
+
             bool ShouldUseW;
+            if ((isMenuEnabled("WCatchCombo") && xSLxOrbwalker.CurrentMode != xSLxOrbwalker.Mode.Combo))
+            {
+                UseW = false;
+            }
+
             var Axe =Axes.Where(
                     axe =>
                         axe.AxeGameObject.IsValid && axe.Position.Distance(Game.CursorPos) <= CatchRange).OrderBy(axe => axe.Distance())
