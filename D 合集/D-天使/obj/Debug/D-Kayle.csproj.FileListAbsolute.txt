@@ -1,0 +1,2 @@
+C:\Users\Administrator\脚本 未汉化\D-系列\D-Kayle\bin\Release\D-Kayle.exe.config
+C:\Users\Administrator\Desktop\D-Kayle\bin\Release\D-Kayle.exe.config
