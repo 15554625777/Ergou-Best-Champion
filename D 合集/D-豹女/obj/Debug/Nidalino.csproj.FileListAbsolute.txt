@@ -1,3 +1,0 @@
-C:\Users\Administrator\脚本 未汉化\D-豹女\bin\Release\Nidalino.exe.config
-C:\Users\Administrator\脚本 未汉化\D-豹女\obj\Debug\Nidalino.csprojResolveAssemblyReference.cache
-C:\Users\Administrator\脚本 已汉化\D-豹女\bin\Release\Nidalino.exe.config
