@@ -1,0 +1,17 @@
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\FedNocturne.exe.config
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\obj\Debug\FedNocturne.csprojResolveAssemblyReference.cache
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\obj\Debug\FedNocturne.Properties.Resources.resources
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\obj\Debug\FedNocturne.csproj.GenerateResource.Cache
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\FedNocturne.exe
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\FedNocturne.pdb
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\LeagueSharp.Common.dll
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\LeagueSharp.dll
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\SharpDX.dll
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\SharpDX.Direct3D9.dll
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\SharpDX.Toolkit.dll
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\SharpDX.Toolkit.Graphics.dll
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\LeagueSharp.xml
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\SharpDX.Toolkit.xml
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\bin\Release\SharpDX.Toolkit.Graphics.xml
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\obj\Debug\FedNocturne.exe
+C:\LeagueSharp\LeagueSharp-master\FedNocturne\obj\Debug\FedNocturne.pdb

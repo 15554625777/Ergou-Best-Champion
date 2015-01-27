@@ -1,0 +1,17 @@
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\FedMaokai.exe.config
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\obj\Debug\FedMaokai.csprojResolveAssemblyReference.cache
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\obj\Debug\FedMaokai.Properties.Resources.resources
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\obj\Debug\FedMaokai.csproj.GenerateResource.Cache
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\FedMaokai.exe
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\FedMaokai.pdb
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\LeagueSharp.Common.dll
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\LeagueSharp.dll
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\SharpDX.dll
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\SharpDX.Direct3D9.dll
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\SharpDX.Toolkit.dll
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\SharpDX.Toolkit.Graphics.dll
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\LeagueSharp.xml
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\SharpDX.Toolkit.xml
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\bin\Release\SharpDX.Toolkit.Graphics.xml
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\obj\Debug\FedMaokai.exe
+C:\LeagueSharp\LeagueSharp-master\FedMaokai\obj\Debug\FedMaokai.pdb

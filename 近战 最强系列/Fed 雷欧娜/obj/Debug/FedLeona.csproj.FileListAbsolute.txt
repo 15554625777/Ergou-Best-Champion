@@ -1,0 +1,17 @@
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\FedLeona.exe.config
+C:\LeagueSharp\LeagueSharp-master\FedLeona\obj\Debug\FedLeona.csprojResolveAssemblyReference.cache
+C:\LeagueSharp\LeagueSharp-master\FedLeona\obj\Debug\FedLeona.Properties.Resources.resources
+C:\LeagueSharp\LeagueSharp-master\FedLeona\obj\Debug\FedLeona.csproj.GenerateResource.Cache
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\FedLeona.exe
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\FedLeona.pdb
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\LeagueSharp.Common.dll
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\LeagueSharp.dll
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\SharpDX.dll
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\SharpDX.Direct3D9.dll
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\SharpDX.Toolkit.dll
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\SharpDX.Toolkit.Graphics.dll
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\LeagueSharp.xml
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\SharpDX.Toolkit.xml
+C:\LeagueSharp\LeagueSharp-master\FedLeona\bin\Release\SharpDX.Toolkit.Graphics.xml
+C:\LeagueSharp\LeagueSharp-master\FedLeona\obj\Debug\FedLeona.exe
+C:\LeagueSharp\LeagueSharp-master\FedLeona\obj\Debug\FedLeona.pdb
