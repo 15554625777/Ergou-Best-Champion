@@ -125,7 +125,7 @@ namespace Xerath
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "使用 E").SetValue(true));
             Config.SubMenu("Combo")
                 .AddItem(
-                    new MenuItem("ComboActive", "开启 连招!").SetValue(
+                    new MenuItem("ComboActive","开启 连招!").SetValue(
                         new KeyBind(Config.Item("Orbwalk").GetValue<KeyBind>().Key, KeyBindType.Press)));
 
             //Misc
@@ -136,7 +136,7 @@ namespace Xerath
             Config.SubMenu("R").AddSubMenu(new Menu("Custom delays", "自定义 延迟"));
             for (int i = 1; i <= 3; i++)
                 Config.SubMenu("R").SubMenu("Custom delays").AddItem(new MenuItem("Delay"+i, "延迟"+i).SetValue(new Slider(0, 1500, 0)));
-            Config.SubMenu("R").AddItem(new MenuItem("PingRKillable", "本地击杀提示 (国服还是不能用)").SetValue(true));
+            Config.SubMenu("R").AddItem(new MenuItem("PingRKillable", "本地击杀提示 (掉FPS必开!)").SetValue(true));
             Config.SubMenu("R").AddItem(new MenuItem("BlockMovement", "右键停止R(按多次继续)").SetValue(false));
             Config.SubMenu("R").AddItem(new MenuItem("OnlyNearMouse", "R鼠标附近的敌人").SetValue(false));
             Config.SubMenu("R").AddItem(new MenuItem("MRadius", "R 半径").SetValue(new Slider(700, 1500, 300)));
@@ -151,7 +151,7 @@ namespace Xerath
                         new KeyBind(Config.Item("Farm").GetValue<KeyBind>().Key, KeyBindType.Press)));
             Config.SubMenu("Harass")
                 .AddItem(
-                    new MenuItem("HarassActiveT", "自动 骚扰!").SetValue(new KeyBind("Y".ToCharArray()[0],
+                    new MenuItem("HarassActiveT", "骚扰 (自动)!").SetValue(new KeyBind("Y".ToCharArray()[0],
                         KeyBindType.Toggle)));
 
             //Farming menu:
@@ -189,7 +189,7 @@ namespace Xerath
 
 
             //Damage after combo:
-            var dmgAfterComboItem = new MenuItem("DamageAfterR", "显示3次R 的伤害").SetValue(true);
+            var dmgAfterComboItem = new MenuItem("DamageAfterR", "Draw damage after 3xR").SetValue(true);
             Utility.HpBarDamageIndicator.DamageToUnit += hero => (float)Player.GetSpellDamage(hero, SpellSlot.R) * 3;
             Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
             dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
@@ -223,13 +223,23 @@ namespace Xerath
             Game.OnGameUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
-            Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Game.OnWndProc += Game_OnWndProc;
-            Game.PrintChat(ChampionName + " Loaded! 涓ㄦ眽鍖朆y 鑺辫竟");
+            Game.PrintChat(ChampionName + " Loaded!花边汉化-Esk0r泽拉斯 加载成功!");
             Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
             Obj_AI_Hero.OnIssueOrder += Obj_AI_Hero_OnIssueOrder;
+        }
+
+        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (!Config.Item("InterruptSpells").GetValue<bool>()) return;
+
+            if (Player.Distance(sender) < E.Range)
+            {
+                E.Cast(sender);
+            }
         }
 
         static void Obj_AI_Hero_OnIssueOrder(Obj_AI_Base sender, GameObjectIssueOrderEventArgs args)
@@ -279,16 +289,6 @@ namespace Xerath
                     RCharge.Position = args.End;
                     RCharge.TapKeyPressed = false;
                 }
-            }
-        }
-
-        private static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-            if (!Config.Item("InterruptSpells").GetValue<bool>()) return;
-
-            if (Player.Distance(unit) < E.Range)
-            {
-                E.Cast(unit);
             }
         }
 
