@@ -10,8 +10,8 @@ namespace KurisuBlitz
     //  |   __|___ _| |  |  |  |___ ___ _| |
     //  |  |  | . | . |  |     | .'|   | . |
     //  |_____|___|___|  |__|__|__,|_|_|___|
-    //  Copyright © Kurisu Solutions 2014          
-
+    //  Copyright © Kurisu Solutions 2015
+      
     internal class Program
     {
         private static Spell q;
@@ -37,10 +37,10 @@ namespace KurisuBlitz
             }
 
             // Set spells      
-            q = new Spell(SpellSlot.Q, 1050);
+            q = new Spell(SpellSlot.Q, 1050f);
             q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
 
-            e = new Spell(SpellSlot.E, _player.AttackRange);
+            e = new Spell(SpellSlot.E, 150f);
             r = new Spell(SpellSlot.R, 550f);
 
             // Load Menu
@@ -61,10 +61,16 @@ namespace KurisuBlitz
         {
             if (_menu.Item("interrupt").GetValue<bool>())
             {
-                if (unit.Distance(_player.Position) < q.Range)
-                    q.Cast(unit);
+                var prediction = q.GetPrediction(unit);
+                if (prediction.Hitchance >= HitChance.Low)
+                {
+                    q.Cast(prediction.CastPosition);
+                }
+
                 else if (unit.Distance(_player.Position) < r.Range)
+                {
                     r.Cast();
+                }
             }
         }
 
@@ -89,9 +95,7 @@ namespace KurisuBlitz
 
         private static void BlitzOnUpdate(EventArgs args)
         {
-
-            _target = TargetSelector.GetSelectedTarget()
-                ?? TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+            _target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
             // do KS
             GodKS(q);
@@ -109,79 +113,81 @@ namespace KurisuBlitz
             // use the god hand
             GodHand(_target);
 
-            // powerfist that hoe
-            foreach (
-                var hero in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => hero.IsValidTarget(_player.AttackRange)))
+            var powerfistTarget = 
+                ObjectManager.Get<Obj_AI_Hero>().First(hero => hero.IsValidTarget(_player.AttackRange));
+            if (powerfistTarget.Distance(_player.ServerPosition) <= _player.AttackRange)
             {
                 if (_menu.Item("useE").GetValue<bool>() && !q.IsReady())
                     e.CastOnUnit(_player);
             }
 
-        }
 
-        private static void GodHand(Obj_AI_Base target)
-        {
-            if (TargetSelector.GetSelectedTarget() != null && _target.Distance(_player.Position) > 1000)
-                return;
+            var itarget =
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .FirstOrDefault(h => h.IsEnemy && h.Distance(_player.ServerPosition, true) <= q.RangeSqr);
 
-            if (target.IsValidTarget() && q.IsReady())
+            if (itarget.IsValidTarget() &&
+                _menu.Item("dograb" + itarget.SkinName).GetValue<StringList>().SelectedIndex == 2)
             {
-                var prediction = q.GetPrediction(target);
-                if (_menu.Item("combokey").GetValue<KeyBind>().Active)
+                if (itarget.Distance(_player.ServerPosition) > _menu.Item("dneeded").GetValue<Slider>().Value)
                 {
-                    if ((target.Distance(_player.Position) > _menu.Item("dneeded").GetValue<Slider>().Value)
-                        && (target.Distance(_player.Position) < _menu.Item("dneeded2").GetValue<Slider>().Value))
-                    {
-                        if (_menu.Item("dograb" + target.SkinName).GetValue<StringList>().SelectedIndex == 0)
-                            return;
-
-                        if (prediction.Hitchance >= HitChance.High &&
-                            _menu.Item("hitchance").GetValue<StringList>().SelectedIndex == 2)
-                        {
-                            q.Cast(prediction.CastPosition);
-                        }
-
-                        else if (prediction.Hitchance >= HitChance.Medium &&
-                                 _menu.Item("hitchance").GetValue<StringList>().SelectedIndex == 1)
-                        {
-                            q.Cast(prediction.CastPosition);
-                        }
-
-                        else if (prediction.Hitchance >= HitChance.Low &&
-                                 _menu.Item("hitchance").GetValue<StringList>().SelectedIndex == 0)
-                        {
-                            q.Cast(prediction.CastPosition);
-                        }
-                    }
-                }
-            }
-
-            foreach (
-                var e in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            e => e.IsValidTarget(q.Range) &&
-                                _menu.Item("dograb" + e.SkinName).GetValue<StringList>().SelectedIndex == 2))
-            {
-                if (e.Distance(_player.Position) > _menu.Item("dneeded").GetValue<Slider>().Value)
-                {
-                    var prediction = q.GetPrediction(e);
+                    var prediction = q.GetPrediction(itarget);
                     if (prediction.Hitchance == HitChance.Immobile &&
                         _menu.Item("immobile").GetValue<bool>())
                     {
                         q.Cast(prediction.CastPosition);
                     }
 
-                    if (prediction.Hitchance == HitChance.Dashing &&
+                    else if (prediction.Hitchance == HitChance.Dashing &&
                         _menu.Item("dashing").GetValue<bool>())
+                    {
+                        q.Cast(prediction.CastPosition);
+                    }
+                }        
+            }
+        }
+
+        private static void GodHand(Obj_AI_Base target)
+        {
+            if (!target.IsValidTarget() || !q.IsReady())
+            {
+                return;
+            }
+
+            if (!_menu.Item("combokey").GetValue<KeyBind>().Active)
+            {
+                return;
+            }
+
+            if ((target.Distance(_player.Position) > _menu.Item("dneeded").GetValue<Slider>().Value) &&
+                (target.Distance(_player.Position) < _menu.Item("dneeded2").GetValue<Slider>().Value))
+            {
+                var prediction = q.GetPrediction(target);
+                if (_menu.Item("dograb" + target.SkinName).GetValue<StringList>().SelectedIndex != 0)
+                {
+                    if (prediction.Hitchance >= HitChance.High &&
+                        _menu.Item("hitchance").GetValue<StringList>().SelectedIndex == 2)
+                    {
+                        q.Cast(prediction.CastPosition);
+                    }
+
+                    else if (prediction.Hitchance >= HitChance.Medium &&
+                             _menu.Item("hitchance").GetValue<StringList>().SelectedIndex == 1)
+                    {
+                        q.Cast(prediction.CastPosition);
+                    }
+
+                    else if (prediction.Hitchance >= HitChance.Low &&
+                             _menu.Item("hitchance").GetValue<StringList>().SelectedIndex == 0)
                     {
                         q.Cast(prediction.CastPosition);
                     }
                 }
             }
         }
+
+
+
 
         private static void GodKS(Spell spell)
         {

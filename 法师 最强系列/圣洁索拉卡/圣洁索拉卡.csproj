@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC26CEE4-91C9-4705-BCC9-FC936AC9D151}</ProjectGuid>
+    <ProjectGuid>{42546CA3-0101-4845-BBAE-75F64289AED2}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KurisuBlitz</RootNamespace>
-    <AssemblyName>KurisuBlitz</AssemblyName>
+    <RootNamespace>Sophies_Soraka</RootNamespace>
+    <AssemblyName>Sophie%27s Soraka</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PreBuildEvent />
@@ -38,13 +38,16 @@
     <Reference Include="LeagueSharp">
       <HintPath>D:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
-    <Reference Include="LeagueSharp.Common">
+    <Reference Include="LeagueSharp.Common, Version=1.0.0.24, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX">
+    <Reference Include="SharpDX, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\LeagueSharp\\System\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D9">
+    <Reference Include="SharpDX.Direct3D9, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\LeagueSharp\\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -57,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SophiesSoraka.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
