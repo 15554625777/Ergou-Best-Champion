@@ -149,119 +149,118 @@ namespace FuckingAwesomeLeeSin
             Q.SetSkillshot(Q.Instance.SData.SpellCastTime, Q.Instance.SData.LineWidth, Q.Instance.SData.MissileSpeed,true,SkillshotType.SkillshotLine);
             
             //Base menu
-            Menu = new Menu("FALeeSin", ChampName, true);
+            Menu = new Menu("FA盲僧", ChampName, true);
             //Orbwalker and menu
-            Menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
+            Menu.AddSubMenu(new Menu("走砍", "Orbwalker"));
             Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
             //Target selector and menu
-            var ts = new Menu("Target Selector", "Target Selector");
+            var ts = new Menu("目标选择", "Target Selector");
             TargetSelector.AddToMenu(ts);
             Menu.AddSubMenu(ts);
             //Combo menu
-            Menu.AddSubMenu(new Menu("Combo", "Combo"));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useQ", "Use Q").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useQ2", "Use Q2").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useW", "Wardjump in combo").SetValue(false));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("dsjk", "Wardjump if: "));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("wMode", "> AA Range || > Q Range").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useE", "Use E").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useR", "Use R").SetValue(false));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("ksR", "KS R").SetValue(false));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("starCombo", "Star Combo").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
+            Menu.AddSubMenu(new Menu("连招", "Combo"));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useQ", "使用 Q").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useQ2", "使用 2段Q").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useW", "连招时丨摸眼").SetValue(false));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("dsjk", "摸眼|如果范围: "));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("wMode", "> 平A范围|| > Q范围").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useE", "使用 E").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useR", "使用 R").SetValue(false));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("ksR", "R 击杀").SetValue(false));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("starCombo", "开始 连招").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
             Menu.SubMenu("Combo").AddItem(new MenuItem("random2ejwej", "W->Q->R->Q2"));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("aaStacks", "Wait for Passive").SetValue(false));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("aaStacks", "等待 被动").SetValue(false));
 
-            var harassMenu = new Menu("Harass", "Harass");
-            harassMenu.AddItem(new MenuItem("q1H", "Use Q1").SetValue(true));
-            harassMenu.AddItem(new MenuItem("q2H", "Use Q2").SetValue(true));
-            harassMenu.AddItem(new MenuItem("wH", "Wardjump/Minion Jump away").SetValue(true));
-            harassMenu.AddItem(new MenuItem("eH", "Use E1").SetValue(false));
+            var harassMenu = new Menu("骚扰", "Harass");
+            harassMenu.AddItem(new MenuItem("q1H", "使用 Q1").SetValue(true));
+            harassMenu.AddItem(new MenuItem("q2H", "使用 Q2").SetValue(true));
+            harassMenu.AddItem(new MenuItem("wH", "摸眼|W逃跑{受伤}").SetValue(true));
+            harassMenu.AddItem(new MenuItem("eH", "使用 E1").SetValue(false));
             Menu.AddSubMenu(harassMenu);
 
             //Jung/Wave Clear
-            var waveclearMenu = new Menu("Wave/Jung Clear", "wjClear");
-            waveclearMenu.AddItem(new MenuItem("sjasjsdsjs", "WaveClear"));
-            waveclearMenu.AddItem(new MenuItem("useQClear", "Use Q").SetValue(true));
-            waveclearMenu.AddItem(new MenuItem("useEClear", "Use E").SetValue(true));
-            waveclearMenu.AddItem(new MenuItem("sjasjjs", "Jungle"));
-            waveclearMenu.AddItem(new MenuItem("jungActive", "Jungle Clear Active").SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
-            waveclearMenu.AddItem(new MenuItem("Qjng", "Use Q").SetValue(true));
-            waveclearMenu.AddItem(new MenuItem("Wjng", "Use W").SetValue(true));
-            waveclearMenu.AddItem(new MenuItem("Ejng", "Use E").SetValue(true));
-            Menu.AddSubMenu(waveclearMenu);
+            var waveclearMenu = new Menu("清线|清野", "wjClear");
+            waveclearMenu.AddItem(new MenuItem("sjasjsdsjs", "清 线"));
+            waveclearMenu.AddItem(new MenuItem("useQClear", "使用 Q").SetValue(true));
+            waveclearMenu.AddItem(new MenuItem("useEClear", "使用 E").SetValue(true));
+            waveclearMenu.AddItem(new MenuItem("sjasjjs", "清 野"));
+            waveclearMenu.AddItem(new MenuItem("jungActive", "开启 按键").SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
+            waveclearMenu.AddItem(new MenuItem("Qjng", "使用 Q").SetValue(true));
+            waveclearMenu.AddItem(new MenuItem("Wjng", "使用 W").SetValue(true));
+            waveclearMenu.AddItem(new MenuItem("Ejng", "使用 E").SetValue(true));
 
             //InsecMenu
-            var insecMenu = new Menu("Insec", "Insec");
-            insecMenu.AddItem(new MenuItem("InsecEnabled", "Enabled").SetValue(new KeyBind("Y".ToCharArray()[0], KeyBindType.Press)));
-            insecMenu.AddItem(new MenuItem("rnshsasdhjk", "Insec Mode:"));
-            insecMenu.AddItem(new MenuItem("insecMode", "Left Click [on] TS [off]").SetValue(true));
-            insecMenu.AddItem(new MenuItem("insecOrbwalk", "Orbwalking").SetValue(true));
-            insecMenu.AddItem(new MenuItem("flashInsec", "Flash insec").SetValue(false));
-            insecMenu.AddItem(new MenuItem("waitForQBuff", "Wait For Q Buff to go").SetValue(false));
-            insecMenu.AddItem(new MenuItem("22222222222222", "(Faster off more dmg on)"));
-            insecMenu.AddItem(new MenuItem("clickInsec", "Click Insec").SetValue(true));
-            var lM = insecMenu.AddSubMenu(new Menu("Click Insec Instructions", "clickInstruct"));
-            lM.AddItem(new MenuItem("1223342334", "Firstly Click the point you want to"));
-            lM.AddItem(new MenuItem("122334233", "Two Times. Then Click your target and insec"));
-            insecMenu.AddItem(new MenuItem("insec2champs", "Insec to allies").SetValue(true));
-            insecMenu.AddItem(new MenuItem("bonusRangeA", "Ally Bonus Range").SetValue(new Slider(0, 0, 1000)));
-            insecMenu.AddItem(new MenuItem("insec2tower", "Insec to towers").SetValue(true));
-            insecMenu.AddItem(new MenuItem("bonusRangeT", "Towers Bonus Range").SetValue(new Slider(0, 0, 1000)));
-            insecMenu.AddItem(new MenuItem("insec2orig", "Insec to original pos").SetValue(true));
-            insecMenu.AddItem(new MenuItem("22222222222", "--"));
-            insecMenu.AddItem(new MenuItem("instaFlashInsec1", "Cast R Manually"));
-            insecMenu.AddItem(new MenuItem("instaFlashInsec2", "And it will flash to insec pos"));
-            insecMenu.AddItem(new MenuItem("instaFlashInsec", "Enabled").SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Toggle)));
+            var insecMenu = new Menu("R 设置", "Insec");
+            insecMenu.AddItem(new MenuItem("InsecEnabled", "使用回旋踢").SetValue(new KeyBind("Y".ToCharArray()[0], KeyBindType.Press)));
+            insecMenu.AddItem(new MenuItem("rnshsasdhjk", "R 模式:"));
+            insecMenu.AddItem(new MenuItem("insecMode", "左键点击 [on] TS [off]").SetValue(true));
+            insecMenu.AddItem(new MenuItem("insecOrbwalk", "使用 走砍").SetValue(true));
+            insecMenu.AddItem(new MenuItem("flashInsec", "闪现 R").SetValue(false));
+            insecMenu.AddItem(new MenuItem("waitForQBuff", "等待Q丨技能CD").SetValue(false));
+            insecMenu.AddItem(new MenuItem("22222222222222", "(更多更快伤害)"));
+            insecMenu.AddItem(new MenuItem("clickInsec", "点击 R").SetValue(true));
+            var lM = insecMenu.AddSubMenu(new Menu("点击 指令 (解说)", "clickInstruct"));
+            lM.AddItem(new MenuItem("1223342334", "首先 选择目标"));
+            lM.AddItem(new MenuItem("122334233", "然后. 就会对你的目标强暴"));
+            insecMenu.AddItem(new MenuItem("insec2champs", "R向队友").SetValue(true));
+            insecMenu.AddItem(new MenuItem("bonusRangeA", "R向队友范围").SetValue(new Slider(0, 0, 1000)));
+            insecMenu.AddItem(new MenuItem("insec2tower", "R向塔底").SetValue(true));
+            insecMenu.AddItem(new MenuItem("bonusRangeT", "R向塔底范围").SetValue(new Slider(0, 0, 1000)));
+            insecMenu.AddItem(new MenuItem("insec2orig", "R向原始位置").SetValue(true));
+            insecMenu.AddItem(new MenuItem("22222222222", "---------"));
+            insecMenu.AddItem(new MenuItem("instaFlashInsec1", "手动使用R"));
+            insecMenu.AddItem(new MenuItem("instaFlashInsec2", "使用闪现R"));
+            insecMenu.AddItem(new MenuItem("instaFlashInsec", "开 启").SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Toggle)));
             Menu.AddSubMenu(insecMenu);
 
-            var autoSmiteSettings = new Menu("Smite Settings", "Auto Smite Settings");
-            autoSmiteSettings.AddItem(new MenuItem("smiteEnabled", "Enabled").SetValue(new KeyBind("M".ToCharArray()[0], KeyBindType.Toggle)));
-            var itemSelMenu = autoSmiteSettings.AddSubMenu(new Menu("Selected Smite Targets", "sst"));
-            itemSelMenu.AddItem(new MenuItem("SRU_Red", "Red Buff").SetValue(true));
-            itemSelMenu.AddItem(new MenuItem("SRU_Blue", "Blue Buff").SetValue(true));
-            itemSelMenu.AddItem(new MenuItem("SRU_Dragon", "Dragon").SetValue(true));
-            itemSelMenu.AddItem(new MenuItem("SRU_Baron", "B'ron").SetValue(true));
-            autoSmiteSettings.AddItem(new MenuItem("qqSmite", "Q->Smite->Q").SetValue(true));
-            autoSmiteSettings.AddItem(new MenuItem("normSmite", "Normal Smite").SetValue(true));
-            autoSmiteSettings.AddItem(new MenuItem("drawSmite", "Draw Smite Range").SetValue(true));
+            var autoSmiteSettings = new Menu("惩戒 设置", "Auto Smite Settings");
+            autoSmiteSettings.AddItem(new MenuItem("smiteEnabled", "开 启").SetValue(new KeyBind("M".ToCharArray()[0], KeyBindType.Toggle)));
+            var itemSelMenu = autoSmiteSettings.AddSubMenu(new Menu("选择 惩戒 目标", "sst"));
+            itemSelMenu.AddItem(new MenuItem("SRU_Red", "红 Buff").SetValue(true));
+            itemSelMenu.AddItem(new MenuItem("SRU_Blue", "蓝 Buff").SetValue(true));
+            itemSelMenu.AddItem(new MenuItem("SRU_Dragon", "小龙").SetValue(true));
+            itemSelMenu.AddItem(new MenuItem("SRU_Baron", "大龙").SetValue(true));
+            autoSmiteSettings.AddItem(new MenuItem("qqSmite", "Q->惩戒->Q").SetValue(true));
+            autoSmiteSettings.AddItem(new MenuItem("normSmite", "正常 惩戒").SetValue(true));
+            autoSmiteSettings.AddItem(new MenuItem("drawSmite", "显示 惩戒 范围").SetValue(true));
             Menu.AddSubMenu(autoSmiteSettings);
 
             //SaveMe Menu
-            var SaveMeMenu = new Menu("Smite Save Settings", "Smite Save Settings");
-            SaveMeMenu.AddItem(new MenuItem("smiteSave", "Smite Save Active").SetValue(true));
-            SaveMeMenu.AddItem(new MenuItem("hpPercentSM", "WWSmite on x%").SetValue(new Slider(10, 1)));
-            SaveMeMenu.AddItem(new MenuItem("param1", "Dont Smite if near and hp = x%")); // TBC
-            SaveMeMenu.AddItem(new MenuItem("dBuffs", "Buffs").SetValue(true));// TBC
+            var SaveMeMenu = new Menu("惩戒 节省 设置", "Smite Save Settings");
+            SaveMeMenu.AddItem(new MenuItem("smiteSave", "启 用").SetValue(true));
+            SaveMeMenu.AddItem(new MenuItem("hpPercentSM", "W惩戒 on x%").SetValue(new Slider(10, 1)));
+            SaveMeMenu.AddItem(new MenuItem("param1", "禁用惩戒|血量设定")); // TBC
+            SaveMeMenu.AddItem(new MenuItem("dBuffs", "Buff").SetValue(true));// TBC
             SaveMeMenu.AddItem(new MenuItem("hpBuffs", "HP %").SetValue(new Slider(30, 1)));// TBC
-            SaveMeMenu.AddItem(new MenuItem("dEpics", "Epics").SetValue(true));// TBC
+            SaveMeMenu.AddItem(new MenuItem("dEpics", "野怪").SetValue(true));// TBC
             SaveMeMenu.AddItem(new MenuItem("hpEpics", "HP %").SetValue(new Slider(10, 1)));// TBC
             Menu.AddSubMenu(SaveMeMenu);
             //Wardjump menu
-            var wardjumpMenu = new Menu("Wardjump", "Wardjump");
+            var wardjumpMenu = new Menu("瞬眼", "Wardjump");
             wardjumpMenu.AddItem(
-                new MenuItem("wjump", "Wardjump key").SetValue(new KeyBind("G".ToCharArray()[0], KeyBindType.Press)));
-            wardjumpMenu.AddItem(new MenuItem("m2m", "Move to mouse").SetValue(true));
-            wardjumpMenu.AddItem(new MenuItem("j2m", "Jump to minions").SetValue(true));
-            wardjumpMenu.AddItem(new MenuItem("j2c", "Jump to champions").SetValue(true));
+                new MenuItem("wjump", "瞬眼键位").SetValue(new KeyBind("G".ToCharArray()[0], KeyBindType.Press)));
+            wardjumpMenu.AddItem(new MenuItem("m2m", "瞬眼向鼠标方向").SetValue(true));
+            wardjumpMenu.AddItem(new MenuItem("j2m", "瞬眼向小兵").SetValue(true));
+            wardjumpMenu.AddItem(new MenuItem("j2c", "瞬眼向敌人").SetValue(true));
             Menu.AddSubMenu(wardjumpMenu);
 
-            var drawMenu = new Menu("Drawing", "Drawing");
-            drawMenu.AddItem(new MenuItem("DrawEnabled", "Draw Enabled").SetValue(false));
-            drawMenu.AddItem(new MenuItem("drawST", "Draw Smite Text").SetValue(true));
-            drawMenu.AddItem(new MenuItem("drawOutLineST", "Draw Outline").SetValue(true));
-            drawMenu.AddItem(new MenuItem("insecDraw", "Draw INSEC").SetValue(true));
-            drawMenu.AddItem(new MenuItem("WJDraw", "Draw WardJump").SetValue(true));
-            drawMenu.AddItem(new MenuItem("drawQ", "Draw Q").SetValue(true));
-            drawMenu.AddItem(new MenuItem("drawW", "Draw W").SetValue(true));
-            drawMenu.AddItem(new MenuItem("drawE", "Draw E").SetValue(true));
-            drawMenu.AddItem(new MenuItem("drawR", "Draw R").SetValue(true));
+            var drawMenu = new Menu("显示", "Drawing");
+            drawMenu.AddItem(new MenuItem("DrawEnabled", "开 启").SetValue(false));
+            drawMenu.AddItem(new MenuItem("drawST", "显示 惩戒 文字").SetValue(true));
+            drawMenu.AddItem(new MenuItem("drawOutLineST", "显示 轮廓").SetValue(true));
+            drawMenu.AddItem(new MenuItem("insecDraw", "回旋踢 范围").SetValue(true));
+            drawMenu.AddItem(new MenuItem("WJDraw", "显示 瞬眼 范围").SetValue(true));
+            drawMenu.AddItem(new MenuItem("drawQ", "显示 Q 范围").SetValue(true));
+            drawMenu.AddItem(new MenuItem("drawW", "显示 W 范围").SetValue(true));
+            drawMenu.AddItem(new MenuItem("drawE", "显示 E 范围").SetValue(true));
+            drawMenu.AddItem(new MenuItem("drawR", "显示 R 范围").SetValue(true));
             Menu.AddSubMenu(drawMenu);
 
-            var miscMenu = new Menu("Misc", "Misc");
-            miscMenu.AddItem(new MenuItem("NFE", "Use Packets?").SetValue(true));
-            miscMenu.AddItem(new MenuItem("QHC", "Q Hitchance").SetValue(new StringList(new []{"LOW", "MEDIUM", "HIGH", "VERY HIGH"}, 1)));
-            miscMenu.AddItem(new MenuItem("IGNks", "Use Ignite?").SetValue(true));
-            miscMenu.AddItem(new MenuItem("qSmite", "Smite Q!").SetValue(true));
+            var miscMenu = new Menu("杂项", "Misc");
+            miscMenu.AddItem(new MenuItem("NFE", "使用 封包?").SetValue(true));
+            miscMenu.AddItem(new MenuItem("QHC", "Q 命中率").SetValue(new StringList(new []{"慢", "正常", "快", "超级 快"}, 1)));
+            miscMenu.AddItem(new MenuItem("IGNks", "使用 点燃?").SetValue(true));
+            miscMenu.AddItem(new MenuItem("qSmite", "智能 Q!").SetValue(true));
             Menu.AddSubMenu(miscMenu);
 
             Menu.AddToMainMenu();
