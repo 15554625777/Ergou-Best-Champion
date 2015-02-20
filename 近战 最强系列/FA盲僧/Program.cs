@@ -160,39 +160,40 @@ namespace FuckingAwesomeLeeSin
             //Combo menu
             Menu.AddSubMenu(new Menu("连招", "Combo"));
             Menu.SubMenu("Combo").AddItem(new MenuItem("useQ", "使用 Q").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useQ2", "使用 2段Q").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("useW", "连招时丨摸眼").SetValue(false));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("dsjk", "摸眼|如果范围: "));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("wMode", "> 平A范围|| > Q范围").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useQ2", "使用 Q2").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("useW", "连招使用瞬眼").SetValue(false));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("dsjk", "瞬眼|如果范围: "));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("wMode", "> AA 范围 || > Q 范围").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("useE", "使用 E").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("useR", "使用 R").SetValue(false));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("ksR", "R 击杀").SetValue(false));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("starCombo", "开始 连招").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("ksR", "抢人头 R").SetValue(false));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("starCombo", "连招键位").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
             Menu.SubMenu("Combo").AddItem(new MenuItem("random2ejwej", "W->Q->R->Q2"));
             Menu.SubMenu("Combo").AddItem(new MenuItem("aaStacks", "等待 被动").SetValue(false));
 
             var harassMenu = new Menu("骚扰", "Harass");
             harassMenu.AddItem(new MenuItem("q1H", "使用 Q1").SetValue(true));
             harassMenu.AddItem(new MenuItem("q2H", "使用 Q2").SetValue(true));
-            harassMenu.AddItem(new MenuItem("wH", "摸眼|W逃跑{受伤}").SetValue(true));
+            harassMenu.AddItem(new MenuItem("wH", "瞬眼|W逃跑{受伤}").SetValue(true));
             harassMenu.AddItem(new MenuItem("eH", "使用 E1").SetValue(false));
             Menu.AddSubMenu(harassMenu);
 
             //Jung/Wave Clear
             var waveclearMenu = new Menu("清线|清野", "wjClear");
-            waveclearMenu.AddItem(new MenuItem("sjasjsdsjs", "清 线"));
+            waveclearMenu.AddItem(new MenuItem("sjasjsdsjs", "清线"));
             waveclearMenu.AddItem(new MenuItem("useQClear", "使用 Q").SetValue(true));
             waveclearMenu.AddItem(new MenuItem("useEClear", "使用 E").SetValue(true));
-            waveclearMenu.AddItem(new MenuItem("sjasjjs", "清 野"));
-            waveclearMenu.AddItem(new MenuItem("jungActive", "开启 按键").SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
+            waveclearMenu.AddItem(new MenuItem("sjasjjs", "清野"));
+            waveclearMenu.AddItem(new MenuItem("jungActive", "清野键位").SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
             waveclearMenu.AddItem(new MenuItem("Qjng", "使用 Q").SetValue(true));
             waveclearMenu.AddItem(new MenuItem("Wjng", "使用 W").SetValue(true));
             waveclearMenu.AddItem(new MenuItem("Ejng", "使用 E").SetValue(true));
+            Menu.AddSubMenu(waveclearMenu);
 
             //InsecMenu
-            var insecMenu = new Menu("R 设置", "Insec");
+            var insecMenu = new Menu("R设置", "Insec");
             insecMenu.AddItem(new MenuItem("InsecEnabled", "使用回旋踢").SetValue(new KeyBind("Y".ToCharArray()[0], KeyBindType.Press)));
-            insecMenu.AddItem(new MenuItem("rnshsasdhjk", "R 模式:"));
+            insecMenu.AddItem(new MenuItem("rnshsasdhjk", "R模式:"));
             insecMenu.AddItem(new MenuItem("insecMode", "左键点击 [on] TS [off]").SetValue(true));
             insecMenu.AddItem(new MenuItem("insecOrbwalk", "使用 走砍").SetValue(true));
             insecMenu.AddItem(new MenuItem("flashInsec", "闪现 R").SetValue(false));
@@ -203,19 +204,19 @@ namespace FuckingAwesomeLeeSin
             lM.AddItem(new MenuItem("1223342334", "首先 选择目标"));
             lM.AddItem(new MenuItem("122334233", "然后. 就会对你的目标强暴"));
             insecMenu.AddItem(new MenuItem("insec2champs", "R向队友").SetValue(true));
-            insecMenu.AddItem(new MenuItem("bonusRangeA", "R向队友范围").SetValue(new Slider(0, 0, 1000)));
+            insecMenu.AddItem(new MenuItem("bonusRangeA", "R向队友").SetValue(new Slider(0, 0, 1000)));
             insecMenu.AddItem(new MenuItem("insec2tower", "R向塔底").SetValue(true));
             insecMenu.AddItem(new MenuItem("bonusRangeT", "R向塔底范围").SetValue(new Slider(0, 0, 1000)));
             insecMenu.AddItem(new MenuItem("insec2orig", "R向原始位置").SetValue(true));
-            insecMenu.AddItem(new MenuItem("22222222222", "---------"));
+            insecMenu.AddItem(new MenuItem("22222222222", "--"));
             insecMenu.AddItem(new MenuItem("instaFlashInsec1", "手动使用R"));
             insecMenu.AddItem(new MenuItem("instaFlashInsec2", "使用闪现R"));
-            insecMenu.AddItem(new MenuItem("instaFlashInsec", "开 启").SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Toggle)));
+            insecMenu.AddItem(new MenuItem("instaFlashInsec", "启用").SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Toggle)));
             Menu.AddSubMenu(insecMenu);
 
-            var autoSmiteSettings = new Menu("惩戒 设置", "Auto Smite Settings");
-            autoSmiteSettings.AddItem(new MenuItem("smiteEnabled", "开 启").SetValue(new KeyBind("M".ToCharArray()[0], KeyBindType.Toggle)));
-            var itemSelMenu = autoSmiteSettings.AddSubMenu(new Menu("选择 惩戒 目标", "sst"));
+            var autoSmiteSettings = new Menu("惩戒设置", "Auto Smite Settings");
+            autoSmiteSettings.AddItem(new MenuItem("smiteEnabled", "启用").SetValue(new KeyBind("M".ToCharArray()[0], KeyBindType.Toggle)));
+            var itemSelMenu = autoSmiteSettings.AddSubMenu(new Menu("选择惩戒目标", "sst"));
             itemSelMenu.AddItem(new MenuItem("SRU_Red", "红 Buff").SetValue(true));
             itemSelMenu.AddItem(new MenuItem("SRU_Blue", "蓝 Buff").SetValue(true));
             itemSelMenu.AddItem(new MenuItem("SRU_Dragon", "小龙").SetValue(true));
@@ -226,11 +227,11 @@ namespace FuckingAwesomeLeeSin
             Menu.AddSubMenu(autoSmiteSettings);
 
             //SaveMe Menu
-            var SaveMeMenu = new Menu("惩戒 节省 设置", "Smite Save Settings");
-            SaveMeMenu.AddItem(new MenuItem("smiteSave", "启 用").SetValue(true));
+            var SaveMeMenu = new Menu("惩戒节省设置", "Smite Save Settings");
+            SaveMeMenu.AddItem(new MenuItem("smiteSave", "启用").SetValue(true));
             SaveMeMenu.AddItem(new MenuItem("hpPercentSM", "W惩戒 on x%").SetValue(new Slider(10, 1)));
             SaveMeMenu.AddItem(new MenuItem("param1", "禁用惩戒|血量设定")); // TBC
-            SaveMeMenu.AddItem(new MenuItem("dBuffs", "Buff").SetValue(true));// TBC
+            SaveMeMenu.AddItem(new MenuItem("dBuffs", "Buffs").SetValue(true));// TBC
             SaveMeMenu.AddItem(new MenuItem("hpBuffs", "HP %").SetValue(new Slider(30, 1)));// TBC
             SaveMeMenu.AddItem(new MenuItem("dEpics", "野怪").SetValue(true));// TBC
             SaveMeMenu.AddItem(new MenuItem("hpEpics", "HP %").SetValue(new Slider(10, 1)));// TBC
@@ -245,7 +246,7 @@ namespace FuckingAwesomeLeeSin
             Menu.AddSubMenu(wardjumpMenu);
 
             var drawMenu = new Menu("显示", "Drawing");
-            drawMenu.AddItem(new MenuItem("DrawEnabled", "开 启").SetValue(false));
+            drawMenu.AddItem(new MenuItem("DrawEnabled", "启用").SetValue(false));
             drawMenu.AddItem(new MenuItem("drawST", "显示 惩戒 文字").SetValue(true));
             drawMenu.AddItem(new MenuItem("drawOutLineST", "显示 轮廓").SetValue(true));
             drawMenu.AddItem(new MenuItem("insecDraw", "回旋踢 范围").SetValue(true));
@@ -257,8 +258,8 @@ namespace FuckingAwesomeLeeSin
             Menu.AddSubMenu(drawMenu);
 
             var miscMenu = new Menu("杂项", "Misc");
-            miscMenu.AddItem(new MenuItem("NFE", "使用 封包?").SetValue(true));
-            miscMenu.AddItem(new MenuItem("QHC", "Q 命中率").SetValue(new StringList(new []{"慢", "正常", "快", "超级 快"}, 1)));
+            miscMenu.AddItem(new MenuItem("NFE", "使用 封包").SetValue(true));
+            miscMenu.AddItem(new MenuItem("QHC", "Q 命中率").SetValue(new StringList(new []{"LOW", "MEDIUM", "HIGH", "VERY HIGH"}, 1)));
             miscMenu.AddItem(new MenuItem("IGNks", "使用 点燃?").SetValue(true));
             miscMenu.AddItem(new MenuItem("qSmite", "智能 Q!").SetValue(true));
             Menu.AddSubMenu(miscMenu);
@@ -273,7 +274,7 @@ namespace FuckingAwesomeLeeSin
             GameObject.OnDelete += GameObject_OnDelete;
             Game.OnWndProc += Game_OnWndProc;
 
-            PrintMessage("Loaded!");
+            PrintMessage("FA鐩插儳 鍔犺浇鎴愬姛!姹夊寲by浜岀嫍!QQ缇361630847!");
         }
 
         #endregion
