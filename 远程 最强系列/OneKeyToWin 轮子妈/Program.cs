@@ -63,54 +63,86 @@ namespace Sivir
             SpellList.Add(R);
 
             //Create the menu
-            Config = new Menu(ChampionName, ChampionName, true);
+            Config = new Menu("OneKeyToWin 轮子妈", ChampionName, true);
 
-            var targetSelectorMenu = new Menu("花边汉化-一键轮子妈", "Target Selector");
+            var targetSelectorMenu = new Menu("目标选择", "Target Selector");
             TargetSelector.AddToMenu(targetSelectorMenu);
             Config.AddSubMenu(targetSelectorMenu);
 
             //Orbwalker submenu
-            Config.AddSubMenu(new Menu("走 砍", "Orbwalking"));
+            Config.AddSubMenu(new Menu("走砍", "Orbwalking"));
 
             //Load the orbwalker and add it to the submenu.
             Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
             Config.AddToMainMenu();
-            Config.AddItem(new MenuItem("pots", "使用 药水").SetValue(true));
-            Config.AddItem(new MenuItem("autoE", "自动 E").SetValue(true));
+            
+            Config.AddItem(new MenuItem("farmW", "清线使用 W").SetValue(true));
+            Config.AddItem(new MenuItem("Hit", "Q 命中率").SetValue(new Slider(2, 2, 0)));
             Config.AddItem(new MenuItem("autoR", "自动 R").SetValue(true));
-            Config.AddItem(new MenuItem("Edmg", "E 抵挡伤害丨hp<= %").SetValue(new Slider(0, 100, 0)));
+            #region Shield
+                Config.SubMenu("E Shield Config").AddItem(new MenuItem("autoE", "自动 E").SetValue(true));
+                Config.SubMenu("E Shield Config").AddItem(new MenuItem("AGC", "敌方突进自动E").SetValue(true));
+                Config.SubMenu("E Shield Config").AddItem(new MenuItem("Edmg", "使用E |受到伤害% 血量").SetValue(new Slider(0, 100, 0))); 
+            #endregion
+            Config.AddItem(new MenuItem("pots", "Use pots").SetValue(true));
 
             //Add the events we are going to use:
             Game.OnGameUpdate += Game_OnGameUpdate;
-            Orbwalking.AfterAttack += AfterAttackEvenH;
-            Game.PrintChat("<font color=\"#9c3232\">S</font>ivir full automatic AI ver 1.2-Loaded! <font color=\"#000000\">by sebastiank1</font> - <font color=\"#00BFFF\">涓ㄦ眽鍖朆y 鑺辫竟!</font>");
+            Orbwalking.AfterAttack += Orbwalker_AfterAttack;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Game.PrintChat("<font color=\"#9c3232\">OneKeyToWin |杞瓙濡坾</font> ver 1.5 <font color=\"#000000\">by sebastiank1</font> - <font color=\"#00BFFF\">鍔犺級鎴愬姛锛佹饥鍖朾y浜岀嫍锛丵Q缇361630847</font>");
 
         }
 
-        private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        public static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var dmg = sender.GetSpellDamage(ObjectManager.Player, args.SData.Name);
             double HpLeft = ObjectManager.Player.Health - dmg;
             double HpPercentage = (dmg * 100) / ObjectManager.Player.Health;
-
-            if (sender.IsValid<Obj_AI_Hero>() && HpPercentage >= Config.Item("Edmg").GetValue<Slider>().Value && !(sender is Obj_AI_Turret) && sender.IsEnemy && args.Target.IsMe && !args.SData.IsAutoAttack() && Config.Item("autoE").GetValue<bool>() && E.IsReady())
+            if (sender.IsValid<Obj_AI_Hero>() && HpPercentage >= Config.Item("Edmg").GetValue<Slider>().Value && !sender.IsValid<Obj_AI_Turret>() && sender.IsEnemy && args.Target.IsMe && !args.SData.IsAutoAttack() && Config.Item("autoE").GetValue<bool>() && E.IsReady())
             {
                 E.Cast();
                 //Game.PrintChat("" + HpPercentage);
             }
-        }
+            foreach (var target in ObjectManager.Get<Obj_AI_Hero>())
+            {
+                if (args.Target.NetworkId == target.NetworkId && args.Target.IsEnemy)
+                {
 
-        private static void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target)
+                    dmg = sender.GetSpellDamage(target, args.SData.Name);
+                     HpLeft = target.Health - dmg;
+
+                    if (!Orbwalking.InAutoAttackRange(target) && target.IsValidTarget(Q.Range) && Q.IsReady())
+                    {
+                        var qDmg = Q.GetDamage(target);
+                        if (qDmg > HpLeft && HpLeft > 0)
+                        {
+                            Q.Cast(target, true);
+                        }
+                    }
+                    
+                }
+            }
+        }
+        private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            var Target = (Obj_AI_Hero)gapcloser.Sender;
+            if (Config.Item("AGC").GetValue<bool>() && E.IsReady() && Target.IsValidTarget(1000))
+                E.Cast();
+            return;
+        }
+        public static void Orbwalker_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            if (!unit.IsMe)
+                return;
             ManaMenager();
             var t = TargetSelector.GetTarget(900, TargetSelector.DamageType.Physical);
-            if (W.IsReady() && unit.IsMe)
+            if (W.IsReady() )
             {
                 if (Orbwalker.ActiveMode.ToString() == "Combo" && target is Obj_AI_Hero && ObjectManager.Player.Mana > RMANA + WMANA)
                     W.Cast();
                 else if (target is Obj_AI_Hero && ObjectManager.Player.Mana > RMANA + WMANA + QMANA)
-                    W.Cast();
-                else if (Orbwalker.ActiveMode.ToString() == "Combo" && ObjectManager.Player.GetAutoAttackDamage(t) * 3 > target.Health && !Q.IsReady() && !R.IsReady())
                     W.Cast();
                 else if (Orbwalker.ActiveMode.ToString() == "LaneClear" && ObjectManager.Player.Mana > RMANA + WMANA + QMANA  && (farmW() || t.IsValidTarget()))
                     W.Cast();
@@ -126,17 +158,21 @@ namespace Sivir
                 var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
                 if (t.IsValidTarget())
                 {
-                    var qDmg = W.GetDamage(t);
-                    if (qDmg * 2 > t.Health)
-                        Q.Cast(t, true);
+                    var qDmg = Q.GetDamage(t) * 1.9;
+                    if (Orbwalking.InAutoAttackRange(t))
+                        qDmg = qDmg + ObjectManager.Player.GetAutoAttackDamage(t) * 3;
+                    if (qDmg  > t.Health)
+                        castQ(t);
                     else if (Orbwalker.ActiveMode.ToString() == "Combo" && ObjectManager.Player.Mana > RMANA + QMANA)
-                        Q.CastIfHitchanceEquals(t, HitChance.VeryHigh, true);
-                    else if (((Orbwalker.ActiveMode.ToString() == "Mixed" || Orbwalker.ActiveMode.ToString() == "LaneClear") ))
+                        castQ(t);
+                    else if (((Orbwalker.ActiveMode.ToString() == "Mixed" || Orbwalker.ActiveMode.ToString() == "LaneClear")))
                         if (ObjectManager.Player.Mana > RMANA + WMANA + QMANA + QMANA && t.Path.Count() > 1)
                             Qc.CastIfHitchanceEquals(t, HitChance.VeryHigh, true);
                         else if (ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * 0.9 )
-                            Q.CastIfHitchanceEquals(t, HitChance.VeryHigh, true);
-                    else if (ObjectManager.Player.Mana > RMANA + QMANA + WMANA)
+                            castQ(t);
+                        else if (ObjectManager.Player.Mana > RMANA + WMANA + QMANA + QMANA)
+                            Q.CastIfWillHit(t, 2, true);
+                    if (ObjectManager.Player.Mana > RMANA + QMANA + WMANA && Q.IsReady())
                     {
                         foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.IsValidTarget(Q.Range)))
                         {
@@ -159,6 +195,17 @@ namespace Sivir
                     R.Cast();
             }
         }
+
+        private static void castQ(Obj_AI_Hero target)
+        {
+            if (Config.Item("Hit").GetValue<Slider>().Value == 0)
+                Q.Cast(target, true);
+            else if (Config.Item("Hit").GetValue<Slider>().Value == 1)
+                Q.CastIfHitchanceEquals(target, HitChance.High, true);
+            else if (Config.Item("Hit").GetValue<Slider>().Value == 2 && target.Path.Count() < 2)
+                Q.CastIfHitchanceEquals(target, HitChance.High, true);
+        }
+
         public static bool farmW()
         {
             var allMinionsW = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 1300, MinionTypes.All);
@@ -167,7 +214,7 @@ namespace Sivir
             {
                 num++;
             }
-            if (num > 4)
+            if (num > 4 && Config.Item("farmW").GetValue<bool>())
                 return true;
             else
                 return false;
