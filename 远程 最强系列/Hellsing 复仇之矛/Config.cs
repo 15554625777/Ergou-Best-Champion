@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-using LeagueSharp;
 using LeagueSharp.Common;
 
 using Color = System.Drawing.Color;
@@ -42,12 +37,8 @@ namespace Kalista
                 _sliderLinks.Add(key, value as MenuWrapper.SliderLink);
         }
 
-        public static void Initialize()
+        static Config()
         {
-            if (initialized)
-                return;
-            initialized = true;
-
             // Create menu
             _menu = new MenuWrapper(MENU_TITLE);
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -11,16 +8,49 @@ namespace Kalista
 {
     public static class Extensions
     {
-        private const string E_BUFF_NAME = "KalistaExpungeMarker";
-
         public static bool HasRendBuff(this Obj_AI_Base target)
         {
-            return target.HasBuff(E_BUFF_NAME);
+            return target.GetRendBuff() != null;
         }
 
         public static BuffInstance GetRendBuff(this Obj_AI_Base target)
         {
-            return target.Buffs.Find(b => b.DisplayName == E_BUFF_NAME);
+            return target.Buffs.Find(b => b.Caster.IsMe && b.IsValidBuff() && b.DisplayName == "KalistaExpungeMarker");
+        }
+
+        public static bool HasUndyingBuff(this Obj_AI_Hero target)
+        {
+            // Tryndamere R
+            if (target.ChampionName == "Tryndamere" &&
+                target.Buffs.Any(b => b.Caster.NetworkId == target.NetworkId && b.IsValidBuff() && b.DisplayName == "Undying Rage"))
+            {
+                return true;
+            }
+
+            // Zilean R
+            if (target.Buffs.Any(b => b.IsValidBuff() && b.DisplayName == "Chrono Shift"))
+            {
+                return true;
+            }
+
+            // Kayle R
+            if (target.Buffs.Any(b => b.IsValidBuff() && b.DisplayName == "JudicatorIntervention"))
+            {
+                return true;
+            }
+
+            // Poppy R
+            if (target.ChampionName == "Poppy")
+            {
+                if (HeroManager.Allies.Any(o =>
+                    !o.IsMe &&
+                    o.Buffs.Any(b => b.Caster.NetworkId == target.NetworkId && b.IsValidBuff() && b.DisplayName == "PoppyDITarget")))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static List<TSource> MakeUnique<TSource>(this List<TSource> list) where TSource : Obj_AI_Base
