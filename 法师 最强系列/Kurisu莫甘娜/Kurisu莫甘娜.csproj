@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC26CEE4-91C9-4705-BCC9-FC936AC9D151}</ProjectGuid>
+    <ProjectGuid>{B9E1AC04-42CF-4342-882B-10B43159A8F3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KurisuBlitz</RootNamespace>
-    <AssemblyName>KurisuBlitz</AssemblyName>
+    <RootNamespace>KurisuMorgana</RootNamespace>
+    <AssemblyName>KurisuMorgana</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PreBuildEvent />

@@ -4,6 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using System.Collections.Generic;
 using Color = System.Drawing.Color;
+using SharpDX;
 
 namespace KurisuNidalee
 {
@@ -33,7 +34,7 @@ namespace KurisuNidalee
         private static readonly Spell Primalsurge = new Spell(SpellSlot.E, 650f);
         private static readonly Spell Takedown = new Spell(SpellSlot.Q, 200f);
         private static readonly Spell Pounce = new Spell(SpellSlot.W, 375f);
-        private static readonly Spell Swipe = new Spell(SpellSlot.E, 300f);
+        private static readonly Spell Swipe = new Spell(SpellSlot.E, 275f);
         private static readonly Spell Aspectofcougar = new Spell(SpellSlot.R);
 
         private static readonly List<Spell> HumanSpellList = new List<Spell>();
@@ -88,7 +89,7 @@ namespace KurisuNidalee
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!_mainMenu.Item("gapcloser").GetValue<bool>())
+            if (!_mainMenu.Item("gapp").GetValue<bool>())
                 return;
 
             var attacker = gapcloser.Sender;
@@ -215,7 +216,7 @@ namespace KurisuNidalee
             _mainMenu.AddItem(new MenuItem("useignote", "使用 点燃")).SetValue(true);
             _mainMenu.AddToMainMenu();
 
-            Game.PrintChat("<font color=\"#7CFC00\"><b>Kurisu璞瑰コ:</b></font> 璇诲彇鎴愬姛锛侊紒锛亅 鍔犺浇鎴愬姛!姹夊寲by浜岀嫍!QQ缇361630847");
+            Game.PrintChat("<font color=\"#7CFC00\"><b>Kurisu璞瑰コ:</b></font> 鍔犺浇鎴愬姛!姹夊寲by浜岀嫍!QQ缇361630847");
 
         }
 
@@ -247,15 +248,16 @@ namespace KurisuNidalee
             if (_mainMenu.Item("useflee").GetValue<KeyBind>().Active)
                 UseFlee();
 
+
             if (Me.HasBuff("Takedown", true))
             {
                 Orbwalking.LastAATick = 0;
             }
 
-            if (_mainMenu.Item("usehumanwauto").GetValue<bool>())
+            if (_mainMenu.Item("imm").GetValue<bool>())
             {
                 // Human W == 0 -- Bushwack is on CD
-                if (HW != 0)
+                if (HW != 0 || !Bushwack.IsReady())
                 {
                     return;
                 }
@@ -306,21 +308,18 @@ namespace KurisuNidalee
                         }
                     }
 
-                    // use on immoble/dashing (doesn't seem to work)
-                    if (_mainMenu.Item("useonhigh").GetValue<bool>())
+       
+                    if (_cougarForm || (HQ != 0 || !Javelin.IsReady()))
                     {
-
-                        if (_cougarForm || HQ != 0)
-                        {
-                            return;
-                        }
-
-                        if (prediction.Hitchance == HitChance.Immobile)
-                            Javelin.Cast(prediction.CastPosition);
-
-                        if (prediction.Hitchance == HitChance.Dashing)
-                            Javelin.Cast(prediction.CastPosition);
+                        return;
                     }
+
+                    if (prediction.Hitchance == HitChance.Immobile && _mainMenu.Item("imm").GetValue<bool>())
+                        Javelin.Cast(prediction.CastPosition);
+
+                    if (prediction.Hitchance == HitChance.Dashing && _mainMenu.Item("dash").GetValue<bool>())
+                        Javelin.Cast(prediction.CastPosition);
+
                 }
             }
         }
@@ -364,7 +363,7 @@ namespace KurisuNidalee
 
             if (CQ == 0)
                 damage += Me.GetSpellDamage(target, SpellSlot.Q, 1);
-            if (CW == 0)
+            if ((CW == 0 || Pounce.IsReady()))
                 damage += Me.GetSpellDamage(target, SpellSlot.W, 1);
             if (CE == 0)
                 damage += Me.GetSpellDamage(target, SpellSlot.E, 1);
@@ -375,21 +374,137 @@ namespace KurisuNidalee
         #endregion
 
         #region Nidalee : Flee
-
+        // Walljumper credits to Hellsing
         private static void UseFlee()
         {
-            Me.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-
-            if (_cougarForm && CW == 0)
-                Pounce.Cast(Game.CursorPos);
-            if (!_cougarForm && Aspectofcougar.IsReady() && CW == 0)
+            if (!_cougarForm && Aspectofcougar.IsReady() && (CW == 0 || Pounce.IsReady()))
                 Aspectofcougar.Cast();
+
+            // We need to define a new move position since jumping over walls
+            // requires you to be close to the specified wall. Therefore we set the move
+            // point to be that specific piont. People will need to get used to it,
+            // but this is how it works.
+            var wallCheck = GetFirstWallPoint(Me.Position, Game.CursorPos);
+
+            // Be more precise
+            if (wallCheck != null)
+                wallCheck = GetFirstWallPoint((Vector3)wallCheck, Game.CursorPos, 5);
+
+            // Define more position point
+            var movePosition = wallCheck != null ? (Vector3)wallCheck : Game.CursorPos;
+
+            // Update fleeTargetPosition
+            var tempGrid = NavMesh.WorldToGrid(movePosition.X, movePosition.Y);
+            var fleeTargetPosition = NavMesh.GridToWorld((short)tempGrid.X, (short)tempGrid.Y);
+
+            // Also check if we want to AA aswell
+            Obj_AI_Base target = null;
+
+            // Reset walljump indicators
+            var wallJumpPossible = false;
+
+            // Only calculate stuff when our Q is up and there is a wall inbetween
+            if (_cougarForm && (CW == 0 || Pounce.IsReady()) && wallCheck != null)
+            {
+                // Get our wall position to calculate from
+                var wallPosition = movePosition;
+
+                // Check 300 units to the cursor position in a 160 degree cone for a valid non-wall spot
+                Vector2 direction = (Game.CursorPos.To2D() - wallPosition.To2D()).Normalized();
+                float maxAngle = 80;
+                float step = maxAngle/20;
+                float currentAngle = 0;
+                float currentStep = 0;
+                bool jumpTriggered = false;
+                while (true)
+                {
+                    // Validate the counter, break if no valid spot was found in previous loops
+                    if (currentStep > maxAngle && currentAngle < 0)
+                        break;
+
+                    // Check next angle
+                    if ((currentAngle == 0 || currentAngle < 0) && currentStep != 0)
+                    {
+                        currentAngle = (currentStep)*(float) Math.PI/180;
+                        currentStep += step;
+                    }
+
+                    else if (currentAngle > 0)
+                        currentAngle = -currentAngle;
+
+                    Vector3 checkPoint;
+
+                    // One time only check for direct line of sight without rotating
+                    if (currentStep == 0)
+                    {
+                        currentStep = step;
+                        checkPoint = wallPosition + Pounce.Range*direction.To3D();
+                    }
+                    // Rotated check
+                    else
+                        checkPoint = wallPosition + Pounce.Range*direction.Rotated(currentAngle).To3D();
+
+                    // Check if the point is not a wall
+                    if (!checkPoint.IsWall())
+                    {
+                        // Check if there is a wall between the checkPoint and wallPosition
+                        wallCheck = GetFirstWallPoint(checkPoint, wallPosition);
+                        if (wallCheck != null)
+                        {
+                            // There is a wall inbetween, get the closes point to the wall, as precise as possible
+                            Vector3 wallPositionOpposite =
+                                (Vector3) GetFirstWallPoint((Vector3) wallCheck, wallPosition, 5);
+
+                            // Check if it's worth to jump considering the path length
+                            if (Me.GetPath(wallPositionOpposite).ToList().To2D().PathLength() -
+                                Me.Distance(wallPositionOpposite) > 200)
+                            {
+                                // Check the distance to the opposite side of the wall
+                                if (Me.Distance(wallPositionOpposite, true) <
+                                    Math.Pow(Pounce.Range - Me.BoundingRadius/2, 2))
+                                {
+                                    // Make the jump happen
+                                    Pounce.Cast(wallPositionOpposite);
+
+                                    // Update jumpTriggered value to not orbwalk now since we want to jump
+                                    jumpTriggered = true;
+
+                                    break;
+                                }
+                                // If we are not able to jump due to the distance, draw the spot to
+                                // make the user notice the possibliy
+                                else
+                                {
+                                    // Update indicator values
+                                    wallJumpPossible = true;
+                                }
+                            }
+
+                            else
+                            {
+                                Render.Circle.DrawCircle(Game.CursorPos, 35, Color.Red, 2);
+                            }
+                        }
+                    }
+                }
+
+                // Check if the loop triggered the jump, if not just orbwalk
+                if (!jumpTriggered)
+                    Orbwalking.Orbwalk(target, Game.CursorPos, 90f, 0f, false, false);
+            }
+
+            // Either no wall or W on cooldown, just move towards to wall then
+            else
+            {
+                Orbwalking.Orbwalk(target, Game.CursorPos, 90f, 0f, false, false);
+                if (_cougarForm && (CW == 0 || Pounce.IsReady()))
+                    Pounce.Cast(Game.CursorPos);
+            }
         }
 
         #endregion
 
         #region Nidalee: SBTW
-
         private static void UseCombo(Obj_AI_Base target)
         {
             if (TargetSelector.GetSelectedTarget() != null && _target.Distance(Me.ServerPosition, true) > 1500 * 1500)
@@ -408,8 +523,8 @@ namespace KurisuNidalee
                 }
 
                 // Check is pounce is ready 
-                else if (CW == 0 && _mainMenu.Item("usecougarw").GetValue<bool>()
-                    && target.Distance(Me.ServerPosition, true) > 30 * 30)
+                if ((CW == 0 || Pounce.IsReady()) && _mainMenu.Item("usecougarw").GetValue<bool>()
+                    && target.Distance(Me.ServerPosition, true) > 250*250)
                 {
                     if (TargetHunted(target) & target.Distance(Me.ServerPosition, true) <= 750*750)
                         Pounce.Cast(target.ServerPosition);
@@ -418,19 +533,13 @@ namespace KurisuNidalee
 
                 }
 
-                else if (target.Distance(Me.ServerPosition, true) > Me.AttackRange*Me.AttackRange)
+                // Check if swipe is ready (no prediction)
+                if ((CE == 0 || Swipe.IsReady()) && _mainMenu.Item("usecougare").GetValue<bool>())
                 {
-                    Pounce.Cast(target.ServerPosition);
-                }
-
-                // Check if swipe is ready (prediction)
-                if (CE == 0 && _mainMenu.Item("usecougare").GetValue<bool>())
-                {
-                    var prediction = Swipe.GetPrediction(target);
-                    if (prediction.Hitchance >= HitChance.Low &&
-                        target.Distance(Me.ServerPosition, true) <= Swipe.RangeSqr)
+                    if (target.Distance(Me.ServerPosition, true) <= Swipe.RangeSqr)
                     {
-                        Swipe.Cast(prediction.CastPosition);
+                        if (!Pounce.IsReady())
+                            Swipe.Cast(target.ServerPosition);
                     }
                 }
 
@@ -444,7 +553,7 @@ namespace KurisuNidalee
 
                     // or return -- stay cougar if we can kill with available spells
                     if (target.Health <= CougarDamage(target) &&
-                        target.Distance(Me.ServerPosition, true) <= Swipe.RangeSqr + Pounce.RangeSqr)
+                        target.Distance(Me.ServerPosition, true) <= Pounce.RangeSqr)
                     {
                         return;
                     }
@@ -454,12 +563,18 @@ namespace KurisuNidalee
                         Aspectofcougar.Cast();
                 }
 
-                // Switch to human form if can kill in 5 aa and cougar skill not available      
-                if (CW != 0 && CE != 0 && CQ != 0 && target.Distance(Me.ServerPosition, true) > Takedown.RangeSqr && CanKillAA(target)
-                    && _mainMenu.Item("usecougarr").GetValue<bool>() && target.Distance(Me.ServerPosition, true) <= Me.AttackRange * Me.AttackRange + 5 * 5)
+                // Switch to human form if can kill in aa and cougar skill not available      
+                if ((CW != 0 || !Pounce.IsReady()) && (CE != 0  || !Swipe.IsReady()) && (CQ != 0 || !Takedown.IsReady()))
                 {
-                    if (Aspectofcougar.IsReady())
-                        Aspectofcougar.Cast();
+                    if (target.Distance(Me.ServerPosition, true) > Takedown.RangeSqr && CanKillAA(target))
+                    {
+                        if (_mainMenu.Item("usecougarr").GetValue<bool>() &&
+                            target.Distance(Me.ServerPosition, true) <= Math.Pow(Me.AttackRange + 50, 2))
+                        {
+                            if (Aspectofcougar.IsReady())
+                                Aspectofcougar.Cast();
+                        }
+                    }
                 }
 
             }
@@ -469,7 +584,7 @@ namespace KurisuNidalee
             {
                 // Switch to cougar if target hunted or can kill target 
                 if (Aspectofcougar.IsReady() && _mainMenu.Item("usecougarr").GetValue<bool>()
-                    && (TargetHunted(target) || target.Health <= CougarDamage(target) && HQ != 0))
+                    && (TargetHunted(target) || target.Health <= CougarDamage(target) && (HQ != 0 || !Javelin.IsReady())))
                 {
                     if (TargetHunted(target) && target.Distance(Me.ServerPosition, true) <= 750*750)
                         Aspectofcougar.Cast();
@@ -477,28 +592,17 @@ namespace KurisuNidalee
                         Aspectofcougar.Cast();
                 }
 
-                else if (HQ == 0 && _mainMenu.Item("usehumanq").GetValue<bool>())
+                else if ((HQ == 0 || Javelin.IsReady()) && _mainMenu.Item("usehumanq").GetValue<bool>())
                 {
                     var prediction = Javelin.GetPrediction(target);
-                    switch (_mainMenu.Item("seth").GetValue<StringList>().SelectedIndex)
+                    if (prediction.Hitchance >= (HitChance)_mainMenu.Item("seth").GetValue<Slider>().Value + 2)
                     {
-                        case 0:
-                            if (prediction.Hitchance >= HitChance.Low || prediction.Hitchance == HitChance.VeryHigh)
-                                Javelin.Cast(prediction.CastPosition);
-                            break;
-                        case 1:
-                            if (prediction.Hitchance >= HitChance.Medium || prediction.Hitchance == HitChance.VeryHigh)
-                                Javelin.Cast(prediction.CastPosition);
-                            break;
-                        case 2:
-                            if (prediction.Hitchance >= HitChance.High || prediction.Hitchance == HitChance.VeryHigh)
-                                Javelin.Cast(prediction.CastPosition);
-                            break;
+                        Javelin.Cast(prediction.CastPosition);
                     }
                 }
 
                 // Check bushwack and cast underneath targets feet.
-                if (HW == 0 && _mainMenu.Item("usehumanw").GetValue<bool>() &&
+                if ((HW == 0 || Bushwack.IsReady()) && _mainMenu.Item("usehumanw").GetValue<bool>() &&
                          target.Distance(Me.ServerPosition, true) <= Bushwack.RangeSqr)
                 {
                     var prediction = Bushwack.GetPrediction(target);
@@ -514,6 +618,9 @@ namespace KurisuNidalee
         #region Nidalee: Harass
         private static void UseHarass(Obj_AI_Base target)
         {
+            if (!target.IsValidTarget(Javelin.Range))
+                return;
+
             var actualHeroManaPercent = (int)((Me.Mana / Me.MaxMana) * 100);
             var minPercent = _mainMenu.Item("humanqpct").GetValue<Slider>().Value;
             if (!_cougarForm && HQ == 0 && _mainMenu.Item("usehumanq2").GetValue<bool>())
@@ -521,20 +628,9 @@ namespace KurisuNidalee
                 var prediction = Javelin.GetPrediction(target);
                 if (target.Distance(Me.ServerPosition, true) <= Javelin.RangeSqr && actualHeroManaPercent > minPercent)
                 {
-                    switch (_mainMenu.Item("seth").GetValue<StringList>().SelectedIndex)
+                    if (prediction.Hitchance >= (HitChance) _mainMenu.Item("seth").GetValue<Slider>().Value + 2)
                     {
-                        case 0:
-                            if (prediction.Hitchance >= HitChance.Low)
-                                Javelin.Cast(prediction.CastPosition);
-                            break;
-                        case 1:
-                            if (prediction.Hitchance >= HitChance.Medium)
-                                Javelin.Cast(prediction.CastPosition);
-                            break;
-                        case 2:
-                            if (prediction.Hitchance >= HitChance.High)
-                                Javelin.Cast(prediction.CastPosition);
-                            break;
+                        Javelin.Cast(prediction.CastPosition);
                     }
                 }
             }
@@ -546,7 +642,8 @@ namespace KurisuNidalee
 
         private static void PrimalSurge()
         {
-            if (HE != 0 || !_mainMenu.Item("usedemheals").GetValue<bool>() || Me.IsRecalling())
+            if ((HE != 0 || !Primalsurge.IsReady()) || !_mainMenu.Item("usedemheals").GetValue<bool>() ||
+                Me.IsRecalling() || Me.InFountain())
             {
                 return;
             }
@@ -575,7 +672,7 @@ namespace KurisuNidalee
                 var needed = _mainMenu.Item("healpct" + target.SkinName).GetValue<Slider>().Value;
                 var hp = (int)((target.Health / target.MaxHealth) * 100);
 
-                if (actualHeroManaPercent > selfManaPercent && hp <= needed || _hasBlue && hp <= needed)
+                if (actualHeroManaPercent > selfManaPercent && hp <= needed || _hasBlue && hp <= 95)
                     Primalsurge.CastOnUnit(target);
             }
         }
@@ -598,26 +695,19 @@ namespace KurisuNidalee
                                 m.IsValidTarget(1500) && Jungleminions.Any(name => !m.Name.StartsWith(name)) &&
                                 m.Name.StartsWith("Minion")))
             {
+                var distW = Me.ServerPosition.Extend(m.ServerPosition, Pounce.Range);
 
                 if (_cougarForm)
                 {
-                    if ((HQ == 0 && _mainMenu.Item("lchumanq").GetValue<bool>() || CW != 0 && CQ != 0 && CE != 0) &&
-                        _mainMenu.Item("lccougarr").GetValue<bool>())
-                    {
-                        if (Aspectofcougar.IsReady())
-                            Aspectofcougar.Cast();
-                    }
-
                     if (m.Distance(Me.ServerPosition, true) <= Swipe.RangeSqr && CE == 0)
                     {
-                        if (_mainMenu.Item("lccougare").GetValue<bool>())
-                            Swipe.Cast(m.ServerPosition);
+                        if (_mainMenu.Item("lccougare").GetValue<bool>() && !Pounce.IsReady())
+                                Swipe.Cast(m.ServerPosition);
                     }
 
-
-                    if (m.Distance(Me.ServerPosition, true) <= Pounce.RangeSqr && CW == 0)
+                    if (m.Distance(Me.ServerPosition, true) <= Pounce.RangeSqr && (CW == 0 || Pounce.IsReady()))
                     {
-                        if (_mainMenu.Item("lccougarw").GetValue<bool>())
+                        if (_mainMenu.Item("lccougarw").GetValue<bool>() && !distW.UnderTurret(true))
                             Pounce.Cast(m.ServerPosition);
                     }
 
@@ -625,6 +715,13 @@ namespace KurisuNidalee
                     {
                         if (_mainMenu.Item("lccougarq").GetValue<bool>())
                             Takedown.CastOnUnit(Me);
+                    }
+
+                    if ((HQ == 0 && _mainMenu.Item("lchumanq").GetValue<bool>() ||
+                        (CW != 0 || !Pounce.IsReady()) && CQ != 0 && CE != 0) && _mainMenu.Item("lccougarr").GetValue<bool>())
+                    {
+                        if (Aspectofcougar.IsReady())
+                            Aspectofcougar.Cast();
                     }
                 }
                 else
@@ -657,65 +754,92 @@ namespace KurisuNidalee
             var actualHeroManaPercent = (int)((Me.Mana / Me.MaxMana) * 100);
             var minPercent = _mainMenu.Item("jgpct").GetValue<Slider>().Value;
 
-            foreach (var m in
+            var smallMinion =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(
-                        m =>
-                            m.IsValidTarget(700) && Jungleminions.Any(name => m.Name.StartsWith(name)) &&
-                            !m.Name.Contains("Mini")))
+                    .FirstOrDefault(x => x.Name.Contains("Mini") && !x.Name.StartsWith("Minion") && x.IsValidTarget(700));
+
+            var bigMinion =
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .FirstOrDefault(
+                        x =>
+                            !x.Name.Contains("Mini") && !x.Name.StartsWith("Minion") &&
+                            Jungleminions.Any(name => x.Name.StartsWith(name)) && x.IsValidTarget(900));
+
+            var m = bigMinion ?? smallMinion;
+            if (m == null)
+                return;
+
+            if (_cougarForm)
             {
-                if (_cougarForm)
+                if (m.Distance(Me.ServerPosition, true) <= Swipe.RangeSqr && CE == 0)
                 {
-                    if ((HQ == 0 && _mainMenu.Item("jghumanq").GetValue<bool>() || CW != 0 && CQ != 0 && CE != 0) &&
-                        _mainMenu.Item("jgcougarr").GetValue<bool>())
-                    {
-                        if (Aspectofcougar.IsReady())
-                            Aspectofcougar.Cast();
-                    }
+                    if (_mainMenu.Item("jgcougare").GetValue<bool>() && !Pounce.IsReady())
+                        Swipe.Cast(m.ServerPosition);
+                }
 
-                    if (m.Distance(Me.ServerPosition, true) <= Swipe.RangeSqr && CE == 0)
-                    {
-                        if (_mainMenu.Item("jgcougare").GetValue<bool>())
-                            Swipe.Cast(m.ServerPosition);
-                    }
+                if (TargetHunted(m) & m.Distance(Me.ServerPosition, true) <= 750 * 750 && (CW == 0 || Pounce.IsReady()))
+                {
+                    if (_mainMenu.Item("jgcougarw").GetValue<bool>())
+                        Pounce.Cast(m.ServerPosition);
+                }
 
-                    if (m.Distance(Me.ServerPosition, true) <= Pounce.RangeSqr && CW == 0)
-                    {
-                        if (_mainMenu.Item("jgcougarw").GetValue<bool>())
-                            Pounce.Cast(m.ServerPosition);
-                    }
+                else if (m.Distance(Me.ServerPosition, true) <= 400 * 400 && (CW == 0 || Pounce.IsReady()))
+                {
+                    if (_mainMenu.Item("jgcougarw").GetValue<bool>())
+                        Pounce.Cast(m.ServerPosition);
+                }
 
-                    if (m.Distance(Me.ServerPosition, true) <= Takedown.RangeSqr && CQ == 0)
+                if (m.Distance(Me.ServerPosition, true) <= Takedown.RangeSqr && CQ == 0)
+                {
+                    if (_mainMenu.Item("jgcougarq").GetValue<bool>())
+                        Takedown.CastOnUnit(Me);
+                }
+
+                if (CW != 0 && CQ != 0 && CE != 0)
+                {
+                    if (HQ != 0)
+                        return;
+
+                    if (Aspectofcougar.IsReady() && _mainMenu.Item("jgcougarr").GetValue<bool>())
+                        Aspectofcougar.Cast();
+                }
+            }
+
+            else
+            {
+                if (actualHeroManaPercent > minPercent && HQ == 0 || _hasBlue && HQ == 0)
+                {
+                    if (_mainMenu.Item("jghumanq").GetValue<bool>())
                     {
-                        if (_mainMenu.Item("jgcougarq").GetValue<bool>())
-                            Takedown.CastOnUnit(Me);
+                        var prediction = Javelin.GetPrediction(m);
+                        if (prediction.Hitchance >= HitChance.Low)
+                            Javelin.Cast(m.ServerPosition);
                     }
                 }
-                else
-                {
-                    if (actualHeroManaPercent > minPercent && HQ == 0)
-                    {
-                        if (_mainMenu.Item("jghumanq").GetValue<bool>())
-                        {
-                            var prediction = Javelin.GetPrediction(m);
-                            if (prediction.Hitchance >= HitChance.Low)
-                                Javelin.Cast(m.ServerPosition);
-                        }
-                    }
 
-                    if (m.Distance(Me.ServerPosition, true) <= Bushwack.RangeSqr && actualHeroManaPercent > minPercent && HW == 0)
+                if (m.Distance(Me.ServerPosition, true) <= Bushwack.RangeSqr)
+                {
+                    if ( actualHeroManaPercent > minPercent &&
+                         HW == 0 || _hasBlue && HQ == 0)
                     {
                         if (_mainMenu.Item("jghumanw").GetValue<bool>())
                             Bushwack.Cast(m.ServerPosition);
                     }
+                }
 
-                    if (_mainMenu.Item("jgcougarr").GetValue<bool>() && m.Distance(Me.ServerPosition, true) <= Pounce.RangeSqr &&
-                        actualHeroManaPercent > minPercent && Aspectofcougar.IsReady() && HQ != 0)
+                if (_mainMenu.Item("jgcougarr").GetValue<bool>() && Aspectofcougar.IsReady())
+                {
+                    var poutput = Javelin.GetPrediction(m);
+                    if ((HQ != 0 || poutput.Hitchance == HitChance.Collision) || _hasBlue && HQ == 0)
                     {
-                        Aspectofcougar.Cast();
+                        if (TargetHunted(m) & m.Distance(Me.ServerPosition, true) <= 750*750)
+                            Aspectofcougar.Cast();
+                        else if (m.Distance(Me.ServerPosition, true) <= 450*450)
+                            Aspectofcougar.Cast();
                     }
                 }
             }
+            
         }
 
         #endregion
@@ -745,7 +869,7 @@ namespace KurisuNidalee
                     }
 
 
-                    if (m.Distance(Me.ServerPosition, true) < Pounce.RangeSqr && CW == 0)
+                    if (m.Distance(Me.ServerPosition, true) < Pounce.RangeSqr && (CW == 0 || Pounce.IsReady()))
                     {
                         if (m.Health <= cwdmg && _mainMenu.Item("lhcougarw").GetValue<bool>())
                             Pounce.Cast(m.ServerPosition);
@@ -881,7 +1005,7 @@ namespace KurisuNidalee
                     Drawing.DrawText(wts[0] - 80, wts[1], Color.Orange, "Q: " + CQ.ToString("0.0"));
                 if (Me.Spellbook.CanUseSpell(SpellSlot.W) == SpellState.NotLearned)
                     Drawing.DrawText(wts[0] - 30, wts[1] + 30, Color.White, "W: Null");
-                else if (CW == 0)
+                else if ((CW == 0 || Pounce.IsReady()))
                     Drawing.DrawText(wts[0] - 30, wts[1] + 30, Color.White, "W: Ready");
                 else
                     Drawing.DrawText(wts[0] - 30, wts[1] + 30, Color.Orange, "W: " + CW.ToString("0.0"));
@@ -918,5 +1042,87 @@ namespace KurisuNidalee
         }
 
         #endregion
+
+        #region Nidalee: Vector Helper
+        // VectorHelper.cs by Hellsing
+        public static bool IsLyingInCone(Vector2 position, Vector2 apexPoint, Vector2 circleCenter, double aperture)
+        {
+            // This is for our convenience
+            double halfAperture = aperture / 2;
+
+            // Vector pointing to X point from apex
+            Vector2 apexToXVect = apexPoint - position;
+
+            // Vector pointing from apex to circle-center point.
+            Vector2 axisVect = apexPoint - circleCenter;
+
+            // X is lying in cone only if it's lying in 
+            // infinite version of its cone -- that is, 
+            // not limited by "round basement".
+            // We'll use dotProd() to 
+            // determine angle between apexToXVect and axis.
+            bool isInInfiniteCone = DotProd(apexToXVect, axisVect) / Magn(apexToXVect) / Magn(axisVect) >
+                // We can safely compare cos() of angles 
+                // between vectors instead of bare angles.
+            Math.Cos(halfAperture);
+
+            if (!isInInfiniteCone)
+                return false;
+
+            // X is contained in cone only if projection of apexToXVect to axis
+            // is shorter than axis. 
+            // We'll use dotProd() to figure projection length.
+            bool isUnderRoundCap = DotProd(apexToXVect, axisVect) / Magn(axisVect) < Magn(axisVect);
+
+            return isUnderRoundCap;
+        }
+
+        private static float DotProd(Vector2 a, Vector2 b)
+        {
+            return a.X * b.X + a.Y * b.Y;
+        }
+
+        private static float Magn(Vector2 a)
+        {
+            return (float)(Math.Sqrt(a.X * a.X + a.Y * a.Y));
+        }
+
+        public static Vector2? GetFirstWallPoint(Vector3 from, Vector3 to, float step = 25)
+        {
+            return GetFirstWallPoint(from.To2D(), to.To2D(), step);
+        }
+
+        public static Vector2? GetFirstWallPoint(Vector2 from, Vector2 to, float step = 25)
+        {
+            var direction = (to - from).Normalized();
+
+            for (float d = 0; d < from.Distance(to); d = d + step)
+            {
+                var testPoint = from + d * direction;
+                var flags = NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y);
+                if (flags.HasFlag(CollisionFlags.Wall) || flags.HasFlag(CollisionFlags.Building))
+                {
+                    return from + (d - step) * direction;
+                }
+            }
+
+            return null;
+        }
+
+        public static List<Obj_AI_Base> GetDashObjects(IEnumerable<Obj_AI_Base> predefinedObjectList = null)
+        {
+            List<Obj_AI_Base> objects;
+            if (predefinedObjectList != null)
+                objects = predefinedObjectList.ToList();
+            else
+                objects = ObjectManager.Get<Obj_AI_Base>().FindAll(o => o.IsValidTarget(Orbwalking.GetRealAutoAttackRange(o)));
+
+            var apexPoint = Me.ServerPosition.To2D() + (Me.ServerPosition.To2D() - Game.CursorPos.To2D()).Normalized() * Orbwalking.GetRealAutoAttackRange(Me);
+
+            return objects.FindAll(o => IsLyingInCone(o.ServerPosition.To2D(), apexPoint, Me.ServerPosition.To2D(), Math.PI)).OrderBy(o => o.Distance(apexPoint, true)).ToList();
+        }
+
+        #endregion
     }
+
 }

@@ -89,7 +89,7 @@ namespace KurisuBlitz
             }
 
             if (_target.IsValidTarget(q.Range * 2))
-                Render.Circle.DrawCircle(_target.Position, _target.BoundingRadius, Color.Red, 10);
+                Render.Circle.DrawCircle(_target.Position, _target.BoundingRadius - 30, Color.Yellow, 3);
         }
 
 
@@ -219,22 +219,22 @@ namespace KurisuBlitz
 
         private static void BlitzMenu()
         {
-            _menu = new Menu("花边汉化-Kurisu机器人", "blitz", true);
+            _menu = new Menu("Kurisu：机器人", "blitz", true);
 
-            var blitzOrb = new Menu("走 砍", "orbwalker");
+            var blitzOrb = new Menu("Blitz: 走砍", "orbwalker");
             _orbwalker = new Orbwalking.Orbwalker(blitzOrb);
             _menu.AddSubMenu(blitzOrb);
 
-            var blitzTS = new Menu("目标 选择", "tselect");
+            var blitzTS = new Menu("Blitz: 目标选择", "tselect");
             TargetSelector.AddToMenu(blitzTS);
             _menu.AddSubMenu(blitzTS);
 
-            var menuD = new Menu("范 围", "drawings");
-            menuD.AddItem(new MenuItem("drawQ", "Q 范围")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
-            menuD.AddItem(new MenuItem("drawR", "R 范围")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
+            var menuD = new Menu("Blitz: 范围", "drawings");
+            menuD.AddItem(new MenuItem("drawQ", "范围 Q")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
+            menuD.AddItem(new MenuItem("drawR", "范围 R")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
             _menu.AddSubMenu(menuD);
 
-            var menuG = new Menu("神 Q", "autograb");
+            var menuG = new Menu("Blitz: 连招", "autograb");
             menuG.AddItem(new MenuItem("hitchance", "命中率"))
                 .SetValue(new StringList(new[] { "低", "中", "高" }, 2));
             menuG.AddItem(new MenuItem("dneeded", "使用 Q丨最小距离")).SetValue(new Slider(255, 0, (int)q.Range));
@@ -242,7 +242,7 @@ namespace KurisuBlitz
             menuG.AddItem(new MenuItem("dashing", "自动Q丨移动的目标")).SetValue(true);
             menuG.AddItem(new MenuItem("immobile", "自动Q丨停止的目标")).SetValue(true);
             menuG.AddItem(new MenuItem("hneeded", "禁用Q|生命值低于 %")).SetValue(new Slider(0));
-            menuG.AddItem(new MenuItem("sep", "花边汉化-Kurisu机器人"));
+            menuG.AddItem(new MenuItem("sep", ""));
 
             foreach (
                 var e in
@@ -257,7 +257,7 @@ namespace KurisuBlitz
 
             _menu.AddSubMenu(menuG);
 
-            var menuK = new Menu("抢 人头", "blitzks");
+            var menuK = new Menu("Blitz: 抢人头", "blitzks");
             menuK.AddItem(new MenuItem("killstealQ", "使用 Q")).SetValue(false);
             menuK.AddItem(new MenuItem("killstealE", "使用 E")).SetValue(false);
             menuK.AddItem(new MenuItem("killstealR", "使用 R")).SetValue(false);
@@ -265,8 +265,10 @@ namespace KurisuBlitz
 
             _menu.AddItem(new MenuItem("interrupt", "打断 法术")).SetValue(true);
             _menu.AddItem(new MenuItem("useE", "Q过来 自动E")).SetValue(true);
-            _menu.AddItem(new MenuItem("combokey", "连招 按键")).SetValue(new KeyBind(32, KeyBindType.Press));
+            _menu.AddItem(new MenuItem("combokey", "连招 键位")).SetValue(new KeyBind(32, KeyBindType.Press));
             _menu.AddToMainMenu();
+			
+			Game.PrintChat("<font color=\"#7CFC00\"><b>Kurisu|鏈哄櫒浜簗:</b></font> 鍔犺浇鎴愬姛!姹夊寲by浜岀嫍!QQ缇361630847");
         }
     }
 }
