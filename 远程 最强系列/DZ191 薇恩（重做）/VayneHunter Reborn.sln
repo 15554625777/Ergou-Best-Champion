@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VayneHunterRework", "VayneHunterRework\VayneHunterRework.csproj", "{9D959F9F-672D-44E5-94CC-DB54F5598BFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VayneHunter Reborn", "VayneHunter Reborn.csproj", "{9D959F9F-672D-44E5-94CC-DB54F5598BFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

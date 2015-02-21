@@ -7,8 +7,8 @@
     <ProjectGuid>{9D959F9F-672D-44E5-94CC-DB54F5598BFD}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VayneHunterRework</RootNamespace>
-    <AssemblyName>VayneHunterRework</AssemblyName>
+    <RootNamespace>VayneHunter_Reborn</RootNamespace>
+    <AssemblyName>VayneHunter Reborn</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PreBuildEvent />
@@ -36,13 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>D:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
+      <HintPath>E:\L#\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>D:\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>E:\L#\\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>D:\LeagueSharp\\System\SharpDX.dll</HintPath>
+      <HintPath>E:\L#\\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,17 +54,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BushReveal.cs" />
-    <Compile Include="Cleanser.cs" />
-    <Compile Include="CleanserRework.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VayneHunterRework.cs" />
+    <Compile Include="Utility\Cleanser.cs" />
+    <Compile Include="Utility\Helpers.cs" />
+    <Compile Include="Utility\ItemManager.cs" />
+    <Compile Include="Utility\MenuHelper.cs" />
+    <Compile Include="Utility\PotionManager.cs" />
+    <Compile Include="VayneHunterReborn.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

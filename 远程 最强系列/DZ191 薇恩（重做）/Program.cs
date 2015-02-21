@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace VayneHunterRework
+namespace VayneHunter_Reborn
 {
     class Program
     {
         static void Main(string[] args)
         {
-            new VayneHunterRework();
+            new VayneHunterReborn();
         }
     }
 }
