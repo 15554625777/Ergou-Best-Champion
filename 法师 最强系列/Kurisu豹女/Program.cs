@@ -137,42 +137,34 @@ namespace KurisuNidalee
             nidaKeys.AddItem(new MenuItem("usejungle", "清野")).SetValue(new KeyBind(86, KeyBindType.Press));
             nidaKeys.AddItem(new MenuItem("useclear", "清线")).SetValue(new KeyBind(86, KeyBindType.Press));
             nidaKeys.AddItem(new MenuItem("uselasthit", "补刀")).SetValue(new KeyBind(35, KeyBindType.Press));
-            nidaKeys.AddItem(new MenuItem("useflee", "逃跑模式")).SetValue(new KeyBind(65, KeyBindType.Press));
+            nidaKeys.AddItem(new MenuItem("useflee", "逃跑")).SetValue(new KeyBind(65, KeyBindType.Press));
             _mainMenu.AddSubMenu(nidaKeys);
 
             var nidaSpells = new Menu("Nidalee: 连招设置", "spells");
-            nidaSpells.AddItem(new MenuItem("seth", "命中率: ")).SetValue(new StringList(new[] { "低", "中", "高" }, 2));
+            nidaSpells.AddItem(new MenuItem("seth", "命中率：")).SetValue(new Slider(3,1,4));
             nidaSpells.AddItem(new MenuItem("usehumanq", "使用 标枪投掷(Q)")).SetValue(true);
-            nidaSpells.AddItem(new MenuItem("useonhigh", "目标：移动的/固定的")).SetValue(true);
             nidaSpells.AddItem(new MenuItem("usehumanw", "使用 丛林伏击(W)")).SetValue(true);
-            nidaSpells.AddItem(new MenuItem("usehumanwauto", "目标：移动的/固定的")).SetValue(true);
             nidaSpells.AddItem(new MenuItem("usecougarq", "使用扑倒(Q)")).SetValue(true);
             nidaSpells.AddItem(new MenuItem("usecougarw", "使用猛扑(W)")).SetValue(true);
             nidaSpells.AddItem(new MenuItem("usecougare", "使用挥击(E)")).SetValue(true);
             nidaSpells.AddItem(new MenuItem("usecougarr", "自动转换形态")).SetValue(true);
-            nidaSpells.AddItem(new MenuItem("useitems", "使用物品")).SetValue(true);
-            nidaSpells.AddItem(new MenuItem("gapcloser", "防止突进")).SetValue(true);
-            
-            nidaSpells.AddItem(new MenuItem("javelinks", "标枪投掷(Q) 抢人头")).SetValue(true);
-            nidaSpells.AddItem(new MenuItem("ksform", "转换形态 抢人头")).SetValue(true);
             _mainMenu.AddSubMenu(nidaSpells);
 
             var nidaHeals = new Menu("Nidalee: 治愈设置", "hengine");
             nidaHeals.AddItem(new MenuItem("usedemheals", "启用")).SetValue(true);
-            nidaHeals.AddItem(new MenuItem("sezz", "治愈 目标优先级: ")).SetValue(new StringList(new[] { "低血量", "ADC" }));
-
+            nidaHeals.AddItem(new MenuItem("sezz", "治愈 目标优先级: ")).SetValue(new StringList(new[] { "Low HP", "Highest AD" }));
+            nidaHeals.AddItem(new MenuItem("healmanapct", "禁用治愈蓝量 %")).SetValue(new Slider(40));
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly))
             {
                 nidaHeals.AddItem(new MenuItem("heal" + hero.SkinName, hero.SkinName)).SetValue(true);
-                nidaHeals.AddItem(new MenuItem("healpct" + hero.SkinName, hero.SkinName + " 治愈目标|血量低于 %")).SetValue(new Slider(50));
+                nidaHeals.AddItem(new MenuItem("healpct" + hero.SkinName, "Heal " + hero.SkinName + " if under %")).SetValue(new Slider(50));
             }
 
-            nidaHeals.AddItem(new MenuItem("healmanapct", "治愈最低蓝量 %")).SetValue(new Slider(40));
             _mainMenu.AddSubMenu(nidaHeals);
 
             var nidaHarass = new Menu("Nidalee: 骚扰设置", "harass");
             nidaHarass.AddItem(new MenuItem("usehumanq2", "使用 标枪投掷(Q)")).SetValue(true);
-            nidaHarass.AddItem(new MenuItem("humanqpct", "骚扰最低蓝量 %")).SetValue(new Slider(70));
+            nidaHarass.AddItem(new MenuItem("humanqpct", "禁用骚扰蓝量 %")).SetValue(new Slider(70));
             _mainMenu.AddSubMenu(nidaHarass);
 
             var nidaJungle = new Menu("Nidalee: 清野设置", "jungleclear");
@@ -182,7 +174,7 @@ namespace KurisuNidalee
             nidaJungle.AddItem(new MenuItem("jgcougarw", "使用猛扑(W)")).SetValue(true);
             nidaJungle.AddItem(new MenuItem("jgcougare", "使用挥击(E)")).SetValue(true);
             nidaJungle.AddItem(new MenuItem("jgcougarr", "自动转换形态")).SetValue(true);
-            nidaJungle.AddItem(new MenuItem("jgpct", "清野最低蓝量 %")).SetValue(new Slider(25));
+            nidaJungle.AddItem(new MenuItem("jgpct", "禁用清野蓝量 %")).SetValue(new Slider(25));
             _mainMenu.AddSubMenu(nidaJungle);
 
             var nidalhit = new Menu("Nidalee: 补刀设置", "lasthit");
@@ -192,7 +184,7 @@ namespace KurisuNidalee
             nidalhit.AddItem(new MenuItem("lhcougarw", "使用猛扑(W)")).SetValue(true);
             nidalhit.AddItem(new MenuItem("lhcougare", "使用挥击(E)")).SetValue(true);
             nidalhit.AddItem(new MenuItem("lhcougarr", "自动转换形态")).SetValue(false);
-            nidalhit.AddItem(new MenuItem("lhpct", "补刀最低蓝量 %")).SetValue(new Slider(55));
+            nidalhit.AddItem(new MenuItem("lhpct", "禁用补刀蓝量 %")).SetValue(new Slider(55));
             _mainMenu.AddSubMenu(nidalhit);
 
             var nidalc = new Menu("Nidalee: 清线设置", "laneclear");
@@ -202,10 +194,10 @@ namespace KurisuNidalee
             nidalc.AddItem(new MenuItem("lccougarw", "使用猛扑(W)")).SetValue(true);
             nidalc.AddItem(new MenuItem("lccougare", "使用挥击(E)")).SetValue(true);
             nidalc.AddItem(new MenuItem("lccougarr", "自动转换形态")).SetValue(false);
-            nidalc.AddItem(new MenuItem("lcpct", "清线最低蓝量 %")).SetValue(new Slider(55));
+            nidalc.AddItem(new MenuItem("lcpct", "禁用清线蓝量 %")).SetValue(new Slider(55));
             _mainMenu.AddSubMenu(nidalc);
 
-            var nidaD = new Menu("Nidalee: 范围显示", "drawings");
+            var nidaD = new Menu("Nidalee: 显示设置", "drawings");
             nidaD.AddItem(new MenuItem("drawQ", "范围 Q")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
             nidaD.AddItem(new MenuItem("drawW", "范围 W")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
             nidaD.AddItem(new MenuItem("drawE", "范围 E")).SetValue(new Circle(true, Color.FromArgb(150, Color.White)));
@@ -213,7 +205,16 @@ namespace KurisuNidalee
             nidaD.AddItem(new MenuItem("drawcds", "显示 技能冷却")).SetValue(true);
             _mainMenu.AddSubMenu(nidaD);
 
-            _mainMenu.AddItem(new MenuItem("useignote", "使用 点燃")).SetValue(true);
+            var nidaM = new Menu("Nidalee: 杂项设置", "misc");
+            nidaM.AddItem(new MenuItem("useitems", "使用 物品")).SetValue(true);
+            nidaM.AddItem(new MenuItem("useignote", "使用 点燃"));
+            nidaM.AddItem(new MenuItem("dash", "Q 突进追击")).SetValue(false);
+            nidaM.AddItem(new MenuItem("gapp", "Q 防止突进")).SetValue(false);
+            nidaM.AddItem(new MenuItem("imm", "Q/W 中断法术")).SetValue(true);
+            nidaM.AddItem(new MenuItem("javelinks", "使用Q抢人头")).SetValue(true);
+            nidaM.AddItem(new MenuItem("ksform", "转换豹形态抢人头")).SetValue(true);
+            _mainMenu.AddSubMenu(nidaM);
+
             _mainMenu.AddToMainMenu();
 
             Game.PrintChat("<font color=\"#7CFC00\"><b>Kurisu璞瑰コ:</b></font> 鍔犺浇鎴愬姛!姹夊寲by浜岀嫍!QQ缇361630847");
@@ -524,7 +525,7 @@ namespace KurisuNidalee
 
                 // Check is pounce is ready 
                 if ((CW == 0 || Pounce.IsReady()) && _mainMenu.Item("usecougarw").GetValue<bool>()
-                    && target.Distance(Me.ServerPosition, true) > 250*250)
+                    && (target.Distance(Me.ServerPosition, true) > 250*250 || CougarDamage(target) >= target.Health))
                 {
                     if (TargetHunted(target) & target.Distance(Me.ServerPosition, true) <= 750*750)
                         Pounce.Cast(target.ServerPosition);
@@ -672,7 +673,7 @@ namespace KurisuNidalee
                 var needed = _mainMenu.Item("healpct" + target.SkinName).GetValue<Slider>().Value;
                 var hp = (int)((target.Health / target.MaxHealth) * 100);
 
-                if (actualHeroManaPercent > selfManaPercent && hp <= needed || _hasBlue && hp <= 95)
+                if (actualHeroManaPercent > selfManaPercent && hp <= needed || _hasBlue && hp <= needed)
                     Primalsurge.CastOnUnit(target);
             }
         }
@@ -754,18 +755,14 @@ namespace KurisuNidalee
             var actualHeroManaPercent = (int)((Me.Mana / Me.MaxMana) * 100);
             var minPercent = _mainMenu.Item("jgpct").GetValue<Slider>().Value;
 
-            var smallMinion =
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(x => x.Name.Contains("Mini") && !x.Name.StartsWith("Minion") && x.IsValidTarget(700));
+            var small = ObjectManager.Get<Obj_AI_Minion>()
+                .FirstOrDefault(x => x.Name.Contains("Mini") && !x.Name.StartsWith("Minion") && x.IsValidTarget(700));
 
-            var bigMinion =
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(
-                        x =>
-                            !x.Name.Contains("Mini") && !x.Name.StartsWith("Minion") &&
-                            Jungleminions.Any(name => x.Name.StartsWith(name)) && x.IsValidTarget(900));
+            var big = ObjectManager.Get<Obj_AI_Minion>()
+                .FirstOrDefault(x => !x.Name.Contains("Mini") && !x.Name.StartsWith("Minion") &&
+                        Jungleminions.Any(name => x.Name.StartsWith(name)) && x.IsValidTarget(900));
 
-            var m = bigMinion ?? smallMinion;
+            var m = big ?? small;
             if (m == null)
                 return;
 
